@@ -4,7 +4,7 @@ left to right direction
 rectangle "Virtual ER" {
   usecase "(Shared) Login" as login
   (Register) as reg
-  (Logout) as logout
+  usecase "(Shared) Logout" as logout
   (View ER Conditions) as view_er
   (Do Virtual Triage) as triage
   (Get Recommendations) as get_rec
