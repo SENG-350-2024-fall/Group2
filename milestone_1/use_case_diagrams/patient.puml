@@ -2,7 +2,7 @@
 left to right direction
 :Patient: as p
 rectangle "Virtual ER" {
-  (Login) as login
+  usecase "(Shared) Login" as login
   (Register) as reg
   (Logout) as logout
   (View ER Conditions) as view_er
