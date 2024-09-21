@@ -1,0 +1,20 @@
+@startuml Patient Use Case Diagram
+left to right direction
+:Patient: as p
+rectangle "Virtual ER" {
+  (Login) as login
+  (Register) as reg
+  (Logout) as logout
+  (View ER Conditions) as view_er
+  (Do Virtual Triage) as triage
+  (Get Recommendations) as get_rec
+  (Schedule Appointment) as schedule
+}
+p --> login
+p --> logout
+p --> view_er
+p --> triage
+login <.. reg : extends
+triage <.. get_rec: extends
+triage <.. schedule : extends
+@enduml
