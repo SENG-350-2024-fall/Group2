@@ -1,4 +1,4 @@
-@startuml Patient Use Case Diagram
+@startuml plantuml
 left to right direction
 :Patient: as p
 rectangle "Virtual ER" {
