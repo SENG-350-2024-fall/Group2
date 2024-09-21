@@ -8,7 +8,7 @@ rectangle "Virtual ER" {
   (View ER Conditions) as view_er
   (Do Virtual Triage) as triage
   (Get Recommendations) as get_rec
-  (Schedule Appointment) as schedule
+  (Enter Patient Queue) as queue
 }
 p --> login
 p --> logout
@@ -16,5 +16,5 @@ p --> view_er
 p --> triage
 login <.. reg : extends
 triage <.. get_rec: extends
-triage <.. schedule : extends
+triage <.. queue : extends
 @enduml
