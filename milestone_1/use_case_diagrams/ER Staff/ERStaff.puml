@@ -1,0 +1,28 @@
+@startuml
+left to right direction
+
+actor "ER Staff" as erStaff
+
+rectangle "Virtual ER" {
+    usecase "Update ER Wait Times" as U1
+    usecase "Confirm ER Appointment" as U2
+    usecase "Manage Patient Triage" as U3
+    usecase "Appointment Rescheduling" as U4
+    usecase "Send Critical Care Notification" as U5
+    usecase "Add Patient" as U6
+    usecase "Remove Patient" as U7
+
+}
+
+erStaff --> U1
+erStaff --> U2
+erStaff --> U3
+erStaff --> U4
+erStaff --> U5
+
+
+
+U3 <|-- U6 : <<extend>>
+U3 <|-- U7 : <<extend>>
+
+@enduml
