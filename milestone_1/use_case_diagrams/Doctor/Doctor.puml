@@ -1,0 +1,20 @@
+@startuml
+left to right direction
+actor "Doctor" as dc
+rectangle "Virtual ER" {
+  usecase "Log in" as login
+  usecase "Log out" as logout
+  usecase "View Patient Information" as viewpatientinfo
+  usecase "View Patient Queue" as viewpatientqueue
+  usecase "View Current Patient" as viewcurrentpatient
+  usecase "View Patient Medical History" as viewmedhistory
+  usecase "View Questionnaire Results" as viewquestionnaire
+}
+dc --> login
+dc --> logout
+dc --> viewpatientinfo
+dc --> viewpatientqueue
+dc --> viewcurrentpatient
+viewpatientinfo <.. viewmedhistory:<<extend>>
+viewpatientinfo <.. viewquestionnaire:<<extend>>
+@enduml
