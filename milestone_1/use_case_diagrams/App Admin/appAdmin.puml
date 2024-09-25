@@ -1,0 +1,31 @@
+@startuml
+left to right direction
+actor "App Administrator" as a
+
+rectangle "Virtual ER" {
+  usecase "Add ER" as AER
+  usecase "View ER" as VER
+  usecase "Add User" as AU
+  usecase "View User" as VU
+  usecase "Run Metrics" as RM
+
+  usecase "Edit ER" as EER
+  usecase "Remove ER" as RER
+
+  usecase "Edit User" as EU
+  usecase "Remove User" as RU
+
+  usecase "Get User/ER Data" as GD
+
+}
+a --> AER
+a --> VER
+a --> AU
+a --> VU
+a --> RM
+VER <.. EER : extends
+VER <.. RER : extends
+VU <.. EU : extends
+VU <.. RU : extends
+RM ..> GD : includes
+@enduml
