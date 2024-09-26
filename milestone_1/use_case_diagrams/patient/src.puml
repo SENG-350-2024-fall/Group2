@@ -14,7 +14,7 @@ p --> login
 p --> logout
 p --> view_er
 p --> triage
-login <.. reg : extends
-triage <.. get_rec: extends
-triage <.. queue : extends
+login <.. reg : <<extend>>
+triage <.. get_rec: <<extend>>
+triage <.. queue : <<extend>>
 @enduml
