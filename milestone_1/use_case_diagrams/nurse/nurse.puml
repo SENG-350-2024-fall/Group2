@@ -1,1 +1,30 @@
+@startuml Nurse
+left to right direction
 
+actor "Nurse" as n
+rectangle "Virtual ER" {
+  usecase "Log in" as login
+  usecase "Log out" as logout
+  usecase "Keep Track of Patient Queue" as viewpatientqueue
+  usecase "Update ER Wait Time" as updateERtime
+  usecase "Communicate With Patient" as patientcommunication 
+  usecase "Review Patient Information" as reviewpatientinformation
+  usecase "Manage Triage" as managetriage
+
+  usecase "View Patient Medical History" as viewhistory
+  usecase "View Patient Questionaire" as viewquestionaire
+  usecase "Move Patient" as movepatient
+}
+
+n --> login
+n --> logout
+n --> viewpatientqueue
+n --> updateERtime
+n --> patientcommunication
+n --> reviewpatientinformation
+n --> managetriage
+
+reviewpatientinformation <.. viewhistory:<<extend>>
+reviewpatientinformation <.. viewquestionaire:<<extend>>
+managetriage <.. movepatient:<<extend>>
+@enduml
