@@ -5,7 +5,7 @@ actor "Nurse" as n
 rectangle "Virtual ER" {
   usecase "Log in" as login
   usecase "Log out" as logout
-  usecase "Keep Track of Patient Queue" as viewpatientqueue
+  usecase "View ER Queue" as viewpatientqueue
   usecase "Update ER Wait Time" as updateERtime
   usecase "Communicate With Patient" as patientcommunication 
   usecase "Review Patient Information" as reviewpatientinformation
