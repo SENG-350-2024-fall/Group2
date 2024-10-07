@@ -1,7 +1,8 @@
 {
     "plantuml.exportOutDir": ".",
     "plantuml.exportSubFolder": false,
-    "plantuml.commandArgs": [
-        
-    ]
+    "plantuml.commandArgs": [],
+    "files.associations": {
+        "*.css": "tailwindcss"
+    }
 }
