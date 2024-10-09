@@ -26,9 +26,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased` }
       >
+        <div className="font-[family-name:var(--font-geist-sans)]">
         {children}
+        </div>
       </body>
     </html>
   );
