@@ -1,5 +1,6 @@
 {
     "recommendations": [
-        "jebbs.plantuml"
+        "jebbs.plantuml",
+        "bradlc.vscode-tailwindcss",
     ]
 }
