@@ -1,3 +1,5 @@
+import Header from "@/components/ui/header";
+
 import { Button } from "@/components/ui/button"
 import {
     Table,
@@ -50,13 +52,13 @@ import {
 
 export default function Page() {
     return (
-        <div className="grid grid-rows-[20px_1fr_20px] min-h-screen p-8 pb-20 sm:p-20">
-            <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+      <div className="relative min-h-screen"> {/* Added padding to the container */}
+        <Header title="Admin Dashboard" />
+        <div className="p-6"> {/* Added padding to the container */}
                 <p className="text-2xl">Admin Dashboard</p>
 
-                <div>
+                <div className="p-6">
                     <p className="text-lg">Users</p>
-                    <Button>Add User</Button>
 
                     <Table>
                         <TableHeader>
@@ -76,11 +78,12 @@ export default function Page() {
                             ))}
                         </TableBody>
                     </Table>
+
+                    <Button>Add User</Button>
                 </div>
 
-                <div>
+                <div className="p-6">
                     <p className="text-lg">Emergency Rooms</p>
-                    <Button>Add ER</Button>
 
                     <Table>
                         <TableHeader>
@@ -100,11 +103,10 @@ export default function Page() {
                             ))}
                         </TableBody>
                     </Table>
+
+                    <Button>Add ER</Button>
                 </div>
-
-
-            
-            </main>
+          </div>
         </div>
     )
 }
