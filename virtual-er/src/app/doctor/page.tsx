@@ -4,6 +4,7 @@ import Header from "@/components/ui/header";
 
 import * as React from "react";
 
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -12,7 +13,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 
 export type Patient = {
   PatientName: string;
@@ -67,10 +67,14 @@ const initialPatients: Patient[] = [
   },
 ];
 
+/*
+This function becomes more complicated as a result of updating the indexes correctly.
+It removes the patient from the top of the list and shifts everything down.
+*/
 export default function Page() {
   const [patients, setPatients] = React.useState(initialPatients);
 
-  const removePatient = () => {
+  const removeCurrentPatient = () => {
     setPatients((prevPatients) => {
       // Remove the first patient and update the queue positions
       const updatedPatients = prevPatients.slice(1).map((patient, index) => ({
@@ -78,6 +82,23 @@ export default function Page() {
         PositionInQueue: index.toString(), // Update position based on index
       }));
       // Add a new Position for the current patient if any remain
+      if (updatedPatients.length > 0) {
+        updatedPatients[0].PositionInQueue = "0 (Current Patient)";
+      }
+      return updatedPatients;
+    });
+  };
+/*
+This function becomes more complicated as a result of updating the indexes correctly.
+It removes the patient that had their remove button clicked.
+*/
+  const removePatient = (index: number) => {
+    setPatients((prevPatients) => {
+      const updatedPatients = prevPatients.filter((_, i) => i !== index).map((patient, newIndex) => ({
+        ...patient,
+        PositionInQueue: newIndex.toString(),
+      }));
+      // Update the current patient position if there's any remaining
       if (updatedPatients.length > 0) {
         updatedPatients[0].PositionInQueue = "0 (Current Patient)";
       }
@@ -98,25 +119,28 @@ export default function Page() {
                 <TableHead>Relevant Information</TableHead>
                 <TableHead>Position in Queue</TableHead>
                 <TableHead>Room Number</TableHead>
+                <TableHead>Remove Patient</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {patients.map((patient) => (
-                <TableRow key={patient.PatientName}>
+              {patients.map((patient, index) => (
+                <TableRow key={index}>
                   <TableCell className="font-medium">{patient.PatientName}</TableCell>
                   <TableCell>{patient.SeverityOfIllness}</TableCell>
                   <TableCell>{patient.RelevantInformation}</TableCell>
                   <TableCell>{patient.PositionInQueue}</TableCell>
                   <TableCell>{patient.RoomNumber}</TableCell>
+                  <TableCell><Button onClick={() => removePatient(index)}>
+                      Remove
+                    </Button></TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </div>
       </div>
-      
       <Button 
-        onClick={removePatient} 
+        onClick={removeCurrentPatient} 
         className="absolute bottom-4 right-4" // Positioning the button at the bottom right
       >
         Remove Current Patient From Queue
