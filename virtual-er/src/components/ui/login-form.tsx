@@ -32,8 +32,8 @@ export default function LoginForm() {
     })
 
     function onSubmit(values: z.infer<typeof formSchema>) {
-        if (values.email.includes("doctor")) {
-            router.push("/doctor");
+        if (values.email.includes("healthcareprofessional")) {
+            router.push("/healthcareprofessional");
         } else if (values.email.includes("patient")) {
             router.push("/patient");
         } else if (values.email.includes("admin")) {
