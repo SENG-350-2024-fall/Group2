@@ -108,7 +108,7 @@ It removes the patient that had their remove button clicked.
 
   return (
     <div className="relative min-h-screen"> {/* Ensure the container takes full height */}
-      <Header title="Healthcare Professional"/>
+      <Header title="Healthcare Professional" ERName=" - Royal Jubilee"/>
       <div className="mt-10"> {/* 10px margin top for the table */}
         <div className="w-2/3 pl-10"> {/* Set width to 2/3 and left padding to 10px */}
           <Table>

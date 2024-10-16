@@ -11,12 +11,13 @@ import Link from 'next/link';
 
 interface HeaderProps {
   title: string;
+  ERName?: string;
 }
 
-export default function Header({ title }: HeaderProps) {
+export default function Header({ title, ERName }: HeaderProps) {
   return (
     <div className="flex items-center justify-between p-4 bg-gray-100">
-      <h1 className="text-xl font-bold">VirtualER</h1>
+      <h1 className="text-xl font-bold">VirtualER {ERName}</h1>
       <div className="flex items-center space-x-2">
         <span className="text-sm text-gray-600">{title != "" ? `Signed in as ${title}` : ""}</span> {/* With {title} we can display a specific user type for each page where the title bar is used. Ex: <Header title="Healthcare Professional"/> */}
         <Link href="/login">
