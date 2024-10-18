@@ -140,6 +140,11 @@ It removes the patient that had their remove button clicked.
         </div>
       </div>
       <Button 
+        className="absolute bottom-4 left-4" // Positioning the button at the bottom right
+      >
+        View Current Patient Information
+      </Button>
+      <Button 
         onClick={removeCurrentPatient} 
         className="absolute bottom-4 right-4" // Positioning the button at the bottom right
       >

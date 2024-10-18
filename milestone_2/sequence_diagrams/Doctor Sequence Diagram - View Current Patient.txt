@@ -1,0 +1,25 @@
+﻿@startuml
+actor Doctor
+autonumber 1.1
+Doctor -> AuthenticationServer: Login authentication request
+AuthenticationServer --> Doctor: Authentication granted
+
+
+autonumber inc A
+'Now we have 2.1
+Doctor -> "Healthcare Dashboard": Load dashboard and patient queue
+database ERData as "ER Data"
+"Healthcare Dashboard" -> ERData: Query respective doctor's ER patient queue
+ERData --> "Healthcare Dashboard": Return query results
+"Healthcare Dashboard" -> "Local Cache": Save patient data locally within application
+"Local Cache" --> "Healthcare Dashboard": Saved successfully
+"Healthcare Dashboard" --> Doctor: Display patient queue
+
+
+autonumber inc A
+'Now we have 3.1
+Doctor -> "Healthcare Dashboard": View current patient button clicked
+"Healthcare Dashboard" -> "Local Cache": Load current patient data
+"Local Cache" --> "Healthcare Dashboard": Populate current patient data form
+"Healthcare Dashboard" --> Doctor: Display current patient form
+@enduml
