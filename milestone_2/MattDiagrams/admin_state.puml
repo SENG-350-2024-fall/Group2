@@ -1,0 +1,30 @@
+@startuml
+
+[*] -> AdminDashboard
+
+AdminDashboard --> AddERPopupForm  : Clicks "Add ER"
+AddERPopupForm  --> AdminDashboard : Completes ER form and clicks save
+AddERPopupForm  --> AdminDashboard : Clicks outside the Popup
+
+AdminDashboard --> AddUserPopupForm : Clicks "Add User"
+AddUserPopupForm  --> AdminDashboard : Completes User form and clicks save
+AddUserPopupForm  --> AdminDashboard : Clicks outside the Popup
+
+
+AdminDashboard --> UserPopup : Clicks a user
+UserPopup --> EditUserMode : Clicks Edit User
+EditUserMode --> ConfirmCloseUser : Clicks outside popup
+EditUserMode --> UserPopup : Saves new user info
+ConfirmCloseUser --> EditUserMode : Cancel
+ConfirmCloseUser --> AdminDashboard : Exit without saving
+UserPopup --> AdminDashboard : Clicks outside the Popup
+
+AdminDashboard --> ERPopup : Clicks an ER
+ERPopup --> EditERMode : Clicks Edit ER
+EditERMode --> ConfirmCloseER : Clicks outside popup
+EditERMode --> ERPopup : Saves new ER info
+ConfirmCloseER --> EditERMode : Cancel
+ConfirmCloseER --> AdminDashboard : Exit without saving
+ERPopup --> AdminDashboard : Clicks outside the Popup
+
+@enduml

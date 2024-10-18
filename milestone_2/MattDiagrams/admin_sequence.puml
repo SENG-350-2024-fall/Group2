@@ -6,10 +6,27 @@ participant "Add ER Popup" as Popup
 database    "ER Data" as DB
 
 
-A -> Dash: Clicks Add ER
-Dash -> A : Opens Popup to add ER
+A -> Dash : Clicks "Add ER"
+activate Dash
+Dash -> Popup : Opens Popup with ER Form
+activate Popup
 A -> Popup : Fills in data fields for new ER
-A -> Popup : Clicks 
+A -> Popup : Clicks "Save New ER"
+Popup -> DB : Pushes new ER to model in Database
+activate DB
+alt Failure to Save
+    DB -> Popup : ER Cannot be added
+    Popup -> Popup : Displays Error on ER Popup
+else Successfully Saved
+    DB -> Popup : Confirms new ER successfully added
+    Popup -> Dash : Closes Popup
+    destroy Popup
+    end
+    
+deactivate DB
+
+Dash --> A
+deactivate Dash
 
 
 @enduml
