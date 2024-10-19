@@ -1,0 +1,91 @@
+@startuml
+class User {
+  ID: integer
+  name: string
+  address: string
+  birthdate: date
+  \age: integer
+  sex: string
+  void delete()
+}
+
+class Patient {
+  ER_Requests: [] ER_Request
+}
+
+class MedicalStaff {
+    homeER: ER
+}
+
+class Nurse {
+    requestsToTriage: ER_Request[]
+}
+
+class Doctor {
+    patientsToSee: ER_Request[]
+}
+
+class ER_Secretary {
+}
+
+class AppAdmin {
+    void addUser(name: string, address: string, birthdate: date, sex: string)
+    void addER(name: string, address: string, maxCapacity: integer)
+    void removeUser(ID: integer)
+    void removeER(ID: integer)
+}
+
+class ER {
+   ID: integer
+   name: string
+   address: string
+   maxCapacity: integer
+   hours: time[]
+   doctors: Doctor[]
+   nurses: Nurse[]
+   secretaries: ER_Secretary[]
+   ER_Request_Queue: ER_Request[]
+   void delete()
+}
+
+class ER_Request {
+  ID: integer
+  patient: Patient
+  nurse: Nurse
+  doctor: Doctor
+  dateTime: dateTime
+  severity: string
+  positionInQueue: integer
+  doctorsNotes: string
+  triaged: boolean
+  questionaire: Questionaire
+  void updateQueue(position: integer)
+  integer minutesInQueue()
+  void removeFromQueue()
+  void delete()
+}
+
+class Questionaire {
+    ID: integer
+    dateTimePainBegan: dateTime
+    existingMedicalConditions: string[]
+    currentMedication: string[]
+    levelOfPain: integer
+    descriptionOfPain: string
+}
+
+
+User <|-- Patient
+User <|-- MedicalStaff
+MedicalStaff <|-- Doctor
+MedicalStaff <|-- Nurse
+MedicalStaff <|-- ER_Secretary
+User <|-- AppAdmin
+
+ER "  1" o-- "*" MedicalStaff
+ER "1  " o-- "*" ER_Request
+
+Patient "1   " *-- "*" ER_Request
+ER_Request "1  " *-- "1  " Questionaire
+
+@enduml

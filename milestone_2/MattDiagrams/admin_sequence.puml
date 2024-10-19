@@ -9,6 +9,7 @@ database    "ER Data" as DB
 A -> Dash : Clicks "Add ER"
 activate Dash
 Dash -> Popup : Opens Popup with ER Form
+deactivate Dash
 activate Popup
 A -> Popup : Fills in data fields for new ER
 A -> Popup : Clicks "Save New ER"
@@ -21,10 +22,10 @@ else Successfully Saved
     DB -> Popup : Confirms new ER successfully added
     Popup -> Dash : Closes Popup
     destroy Popup
+    activate Dash
     end
     
 deactivate DB
-
 Dash --> A
 deactivate Dash
 
