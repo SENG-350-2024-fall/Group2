@@ -1,0 +1,19 @@
+@startuml
+
+[*] -> DoctorDashboard
+
+DoctorDashboard --> RemovePatientPopup: Remove patient clicked
+RemovePatientPopup -> UpdatePatientDatabase: Confirm removal
+UpdatePatientDatabase -> DoctorDashboard: Patient removed from queue
+RemovePatientPopup -> DoctorDashboard : Cancel removal
+
+DoctorDashboard -> LogoutPopup: Logout button clicked
+LogoutPopup -> RedirectToLogin : Confirm logout
+LogoutPopup -> DoctorDashboard : Cancel logout
+
+DoctorDashboard -----> DisplayPatientInfo : View patient info clicked
+DisplayPatientInfo --> DoctorDashboard : Close button clicked
+
+RedirectToLogin  -> [*]
+
+@enduml
