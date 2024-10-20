@@ -1,0 +1,33 @@
+@startuml plantuml
+hide empty description
+state "LoginPage" as login
+state "RegisterForm" as reg
+state "PatientDashboard" as dash
+state "PatientQuestionnaire" as triage
+state "Recommendations" as rec
+state "VisitER" as visit_er
+state "ERQueueConfirmation" as confirm
+state c <<choice>>
+
+[*] -> login
+login -> [*] : Exit
+
+login --> reg : Clicks "Register"
+reg -> login : Clicks "Cancel"
+reg -> dash : Completes form
+
+login --> dash : Logs in as patient
+login <-- dash : Clicks "Logout"
+
+dash --> triage : Clicks "Do triage questionnaire"
+dash <-- triage : Clicks "Cancel"
+
+triage --> c : Questionnaire is complete
+
+c -> rec : [Patient does not need to visit ER]
+rec -> dash : Clicks "Back to dashboard"
+c --> visit_er : [Patient needs to visit ER]
+visit_er -> confirm : Clicks an ER
+confirm -> dash : Clicks "Back to dashboard"
+
+@enduml
