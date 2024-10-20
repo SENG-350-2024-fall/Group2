@@ -1,0 +1,30 @@
+@startuml
+
+' Defining the external database in the center
+database ExternalDB as "External Database"
+
+' Defining processes as boxes for each webpage, surrounding the database
+rectangle "1 Login Page" as LoginPage
+rectangle "2 Medical Professional Page" as MedicalProfessionalPage
+rectangle "Admin Page" as AdminPage
+rectangle "Patient Page" as PatientPage
+
+' Positioning the boxes around the database
+LoginPage -down-> ExternalDB
+MedicalProfessionalPage -up-> ExternalDB
+AdminPage -left-> ExternalDB
+PatientPage -right-> ExternalDB
+
+' Basic data flows between pages and the external database
+LoginPage --> ExternalDB: Validate User
+MedicalProfessionalPage --> ExternalDB: Access Records
+AdminPage --> ExternalDB: Manage Users
+PatientPage --> ExternalDB: Access Appointments
+
+' Adding return flows from the database to the webpages
+ExternalDB --> LoginPage: User Validation Result
+ExternalDB --> MedicalProfessionalPage: Records Data
+ExternalDB --> AdminPage: User Management Confirmation
+ExternalDB --> PatientPage: Appointment Data
+
+@enduml

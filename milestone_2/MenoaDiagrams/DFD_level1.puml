@@ -1,0 +1,55 @@
+@startuml
+!define RECTANGLE rectangle
+!define DATABASE database
+
+' Define External Entities
+RECTANGLE Patient as "Patient"
+RECTANGLE MedicalProfessional as "Medical Professional"
+RECTANGLE Admin as "Admin"
+
+' Define Processes
+RECTANGLE LoginProcess as "1. Login Process"
+RECTANGLE MedicalProfessionalPage as "2. Medical Professional Page"
+RECTANGLE AdminPage as "3. Admin Page"
+RECTANGLE PatientPage as "4. Patient Page"
+
+' Define Data Stores
+DATABASE Database as "Database"
+DATABASE TriageSystem as "Triage System"
+
+' Data Flows between External Entities and Processes
+Patient --> LoginProcess : "1.1 Enter Email & Password"
+MedicalProfessional --> MedicalProfessionalPage : "2.1 Access Medical Professional Page"
+Admin --> AdminPage : "3.1 Access Admin Page"
+Patient --> PatientPage : "4.1 View Emergency Rooms"
+
+' Data Flows for Login Process
+LoginProcess --> Database : "1.2 Verify User Credentials"
+Database --> LoginProcess : "1.3 Return Auth Status & Next Page"
+LoginProcess --> Patient : "1.4 Redirect to Patient Page"
+LoginProcess --> MedicalProfessional : "1.5 Redirect to Medical Professional Page"
+LoginProcess --> Admin : "1.6 Redirect to Admin Page"
+
+' Data Flows for Medical Professional Page
+MedicalProfessionalPage --> TriageSystem : "2.2 Request Current Patient Queue"
+TriageSystem --> MedicalProfessionalPage : "2.3 Return Patient Queue"
+MedicalProfessionalPage --> TriageSystem : "2.4 Add Patient to Queue"
+MedicalProfessionalPage --> TriageSystem : "2.5 Remove Patient from Queue"
+MedicalProfessionalPage --> TriageSystem : "2.6 Modify Patient Requests"
+TriageSystem --> Patient : "2.7 Notify Patients of Changes"
+
+' Data Flows for Admin Page
+AdminPage --> Database : "3.2 Update Wait Times"
+Database --> AdminPage : "3.3 Return Updated Wait Times"
+AdminPage --> TriageSystem : "3.4 Modify Core Functionalities"
+TriageSystem --> AdminPage : "3.5 Return System Status"
+
+' Data Flows for Patient Page
+PatientPage --> TriageSystem : "4.2 Create Appointment"
+PatientPage --> TriageSystem : "4.3 Remove Appointment"
+TriageSystem --> PatientPage : "4.4 Return Updated Appointments"
+PatientPage --> Database : "4.5 Fetch Nearby Emergency Rooms"
+Database --> PatientPage : "4.6 Return Emergency Rooms & Wait Times"
+TriageSystem --> PatientPage : "4.7 Real-time Queue Updates"
+
+@enduml

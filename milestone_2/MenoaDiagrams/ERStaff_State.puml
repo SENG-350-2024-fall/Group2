@@ -1,0 +1,16 @@
+@startuml
+
+[*] --> MainPage : ER Staff logs in
+
+MainPage --> TriageView : Views patient triage list
+TriageView --> ModifyPatientForm : Selects a patient to modify
+ModifyPatientForm --> TriageView : Updates patient details
+ModifyPatientForm --> TriageView : Cancels modification
+
+TriageView --> RemovePatientConfirmation : Selects a patient to remove
+RemovePatientConfirmation --> TriageView : Confirms removal
+RemovePatientConfirmation --> TriageView : Cancels removal
+
+TriageView --> MainPage : Logs out
+
+@enduml

@@ -1,0 +1,64 @@
+@startuml
+
+actor       "ER Staff" as ERStaff
+participant "Login System" as Login
+participant "Main Page" as MainPage
+participant "Triage View" as Triage
+database    "Patient Database" as DB
+
+== ER Staff Login ==
+ERStaff -> Login : Enter credentials
+activate Login
+Login -> DB : Validate credentials
+activate DB
+DB --> Login : Credentials valid
+deactivate DB
+Login --> ERStaff : Login successful
+deactivate Login
+
+== Viewing Patient Triage ==
+ERStaff -> MainPage : Open main page
+activate MainPage
+MainPage -> Triage : Display patient triage data
+deactivate MainPage
+activate Triage
+Triage -> DB : Fetch patient triage list
+activate DB
+DB --> Triage : Send patient triage data
+deactivate DB
+Triage --> ERStaff : Show list of patients
+
+== Modifying Patient Details ==
+ERStaff -> Triage : Select patient to modify
+Triage -> DB : Fetch patient details
+activate DB
+DB --> Triage : Send patient details
+deactivate DB
+ERStaff -> Triage : Update patient details
+Triage -> DB : Update patient record
+activate DB
+alt Failure to Update
+    DB -> Triage : Update failed
+    Triage -> Triage : Display error message
+else Successfully Updated
+    DB -> Triage : Update success
+    Triage --> ERStaff : Show update success
+end
+deactivate DB
+
+== Removing Patient from Triage ==
+ERStaff -> Triage : Select patient to remove
+Triage -> DB : Delete patient record
+activate DB
+alt Failure to Remove
+    DB -> Triage : Deletion failed
+    Triage -> Triage : Display error message
+else Successfully Removed
+    DB -> Triage : Deletion success
+    Triage --> ERStaff : Show deletion success
+end
+deactivate DB
+
+Triage --> ERStaff : Logout
+
+@enduml
