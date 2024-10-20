@@ -10,11 +10,11 @@ node "Virtual ER Server" {
 
 node "ER System" {
   [ER Queue] --> [Virtual ER Server]
-  [Doctors' Dashboard] --> [ER Queue]
+  [Dashboard] --> [ER Queue]
 }
 
 [Patient's Device] --> [Virtual ER Server]
 [Virtual ER Server] --> [ER System]
-[Virtual ER Server] --> [Nurse/Clinician Hotline]
+[Virtual ER Server] --> [Nurse Hotline]
 [Virtual ER Server] --> [Emergency Services (911)]
 @enduml
