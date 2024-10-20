@@ -1,0 +1,14 @@
+@startuml State
+[*] --> Idle
+
+Idle --> LoggedIn : Nurse logs in
+LoggedIn --> ViewingQueue : Nurse views patient queue
+ViewingQueue --> ReviewingPatient : Nurse selects patient from queue
+ReviewingPatient --> HandlingCritical : Patient is critical
+ReviewingPatient --> ProvidingGuidance : Patient is non-critical
+
+HandlingCritical --> LoggedIn : Patient escalated to doctor
+ProvidingGuidance --> LoggedIn : Nurse provides guidance
+
+[*] --> LoggedIn : Login success
+@enduml
