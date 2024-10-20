@@ -1,0 +1,43 @@
+@startuml plantuml
+
+package GUI {
+    [LoginPage] as login
+    [PatientDashboard] as patient
+    [AdminDashboard] as admin
+    [HealthcareProfessionalDashboard] as er_staff
+}
+
+package Server {
+    () ERs
+    () Users
+    () Authenticate
+    () Request
+
+    [UserController] as uc
+    [ERController] as ec
+    [AuthHandler] as auth
+    [RequestHandler] as req
+}
+
+database Databases {
+    [ER Database] as ed
+    [User Database] as ud
+    [Credentials Database] as cd
+}
+
+ec - ERs
+uc - Users
+auth - Authenticate
+req - Request
+
+login --> Authenticate
+patient --> Request
+admin --> Request
+er_staff --> Request
+
+req --> ERs
+req --> Users
+
+ec --> ed
+uc --> ud
+auth --> cd
