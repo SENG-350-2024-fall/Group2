@@ -1,0 +1,57 @@
+@startuml plantuml
+actor Patient as p
+participant "__:GUI__" as g
+participant "__:RequestHandler__" as h
+participant "__:PatientQueue__" as q
+database "__:UserDatabase__" as d
+
+activate g
+
+p -> g : Login Request
+
+g -> h : login(credentials)
+activate h
+
+h -> d : Validate Credentials
+activate d
+h <-- d : Credentials Validated
+deactivate d
+
+g <-- h
+deactivate h
+
+p <- g : Patient Dashboard
+p -> g : Triage Request
+p <- g : Triage Questions
+p -> g : Triage Responses
+g -> h : triage(results)
+activate h
+
+g <- h : Triage Results
+deactivate h
+
+alt Patient should come to ER
+
+    p <- g : Display Nearby ERs
+    p -> g : Choose ER
+    g -> h : addPatientToQueue(triageResults, ER)
+    activate h
+
+    h -> q : addPatient(triageResults)
+    activate q
+    h <-- q
+    deactivate q
+
+    g <-- h
+    deactivate h
+
+    p <- g : Confirm Patient is in queue
+else Patient should not come to the ER
+    p <- g : Show Recommendations
+end
+
+p -> g : Logout Request
+p <-- g
+deactivate g
+
+@enduml

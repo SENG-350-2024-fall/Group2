@@ -11,7 +11,7 @@ DoctorDashboard -> LogoutPopup: Logout button clicked
 LogoutPopup -> RedirectToLogin : Confirm logout
 LogoutPopup -> DoctorDashboard : Cancel logout
 
-DoctorDashboard -----> DisplayPatientInfo : View patient info clicked
+DoctorDashboard -up-> DisplayPatientInfo : View patient info clicked
 DisplayPatientInfo --> DoctorDashboard : Close button clicked
 
 RedirectToLogin  -> [*]
