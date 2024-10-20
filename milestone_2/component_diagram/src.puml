@@ -1,15 +1,17 @@
 @startuml plantuml
 
-component Client {
-    [GUI] as gui
+package GUI {
+    [LoginPage] as login
+    [PatientDashboard] as patient
+    [AdminDashboard] as admin
+    [HealthcareProfessionalDashboard] as er_staff
 }
 
-component Server {
-    portin HTTP
-
+package Server {
     () ERs
     () Users
     () Authenticate
+    () Request
 
     [UserController] as uc
     [ERController] as ec
@@ -26,13 +28,15 @@ database Databases {
 ec - ERs
 uc - Users
 auth - Authenticate
+req - Request
 
-gui --> HTTP
-HTTP --> req
+login --> Authenticate
+patient --> Request
+admin --> Request
+er_staff --> Request
 
 req --> ERs
 req --> Users
-req --> Authenticate
 
 ec --> ed
 uc --> ud
