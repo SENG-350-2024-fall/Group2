@@ -1,19 +1,14 @@
-@startuml CollaborationNurse
-actor Nurse as N
-participant "Virtual ER System" as VERS
-participant "Patient Data" as PD
-participant "Doctor" as D
+@startuml nurseCollaboration
+hide empty description
 
-N --> VERS: Login
-VERS --> PD: Get patient queue
-PD --> VERS: Return queue
-VERS --> N: Show queue
-N --> VERS: Select patient
-VERS --> PD: Get patient info
-PD --> VERS: Return info
-VERS --> N: Show info
+Nurse --> __:VirtualERSystem__ : 1: login()
+__:VirtualERSystem__ --> __:PatientData__ : 2: getQueue()
+__:PatientData__ --> __:VirtualERSystem__ : 3: returnQueue()
+__:VirtualERSystem__ --> Nurse : 4: displayQueue()
+Nurse --> __:VirtualERSystem__ : 5: selectPatient()
+__:VirtualERSystem__ --> __:PatientData__ : 6: getPatientInfo()
+__:PatientData__ --> __:VirtualERSystem__ : 7: returnInfo()
+__:VirtualERSystem__ --> Nurse : 8: displayInfo()
+Nurse --> Doctor : 9: escalateCritical()
 
-alt Critical
-  N --> D: Escalate to doctor
-end
 @enduml

@@ -1,24 +1,16 @@
-@startuml CollaborationDoctor
-actor Doctor as D
-participant "Virtual ER System" as VERS
-participant "ER Queue" as Queue
-participant "Patient Data" as PD
+@startuml doctorCollaboration
+hide empty description
 
-D --> VERS: Login
-VERS --> D: Authentication Success
+Doctor --> __:VirtualERSystem__ : 1: login()
+__:VirtualERSystem__ --> Doctor : 2: authenticationSuccess()
+Doctor --> __:ERQueue__ : 3: ViewQueue()
+__:ERQueue__ --> __:VirtualERSystem__ : 4: sendQueue()
+__:VirtualERSystem__ --> Doctor : 5: displayQueue()
+Doctor --> __:VirtualERSystem__ : 6: selectPatient()
+__:VirtualERSystem__ --> __:PatientData__ : 7: retrieveData()
+__:PatientData__ --> __:VirtualERSystem__ : 8: returnData()
+__:VirtualERSystem__ --> Doctor : 9: displayPatientData()
+Doctor --> __:PatientData__ : 10-1: updateCritical()
+Doctor --> __:PatientData__ : 10-2: updateNonCritical()
 
-D --> Queue: View patient queue
-Queue --> VERS: Send queue
-VERS --> D: Display patient queue
-
-D --> VERS: Select patient
-VERS --> PD: Retrieve patient information
-PD --> VERS: Return information
-VERS --> D: Show patient details
-
-alt Critical condition
-  D --> PD: Update critical patient status
-else Non-critical condition
-  D --> PD: Update patient status
-end
 @enduml

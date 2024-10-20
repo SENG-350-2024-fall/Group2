@@ -1,21 +1,12 @@
-@startuml CollaborationITAdministrator
-actor "IT Administrator" as IT
-participant "Virtual ER System" as VERS
-participant "User Management" as UM
-participant "System Logs" as Logs
-participant "ER System" as ERS
+@startuml ITAdministratorCollaboration
+hide empty description
 
-IT --> VERS: Login
-VERS --> IT: Authentication Success
+ITAdministrator --> __:VirtualERSystem__ : 1: login()
+__:VirtualERSystem__ --> ITAdministrator : 2: authenticationSuccess()
+__:VirtualERSystem__ --> __:UserManagement__ : 3: addUser() or removeUser()
+__:UserManagement__ --> __:VirtualERSystem__ : 4: updateAccountInformation()
+__:VirtualERSystem__ --> __:SystemLogs__ : 5: requestSystemLogs()
+__:SystemLogs__ --> __:VirtualERSystem__ : 6: displaySystemLogs()
+ITAdministrator --> __:VirtualERSystem__ : 7: updateSystemConfig()
 
-IT --> UM: Manage user accounts (add/remove)
-UM --> VERS: Update account information
-
-IT --> Logs: Monitor system logs
-Logs --> IT: Show system logs
-
-IT --> ERS: Ensure ER system connectivity
-ERS --> IT: Confirm connection
-
-IT --> VERS: Update system configurations
 @enduml

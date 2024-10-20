@@ -1,18 +1,13 @@
-@startuml CollaborationERReceptionist
-actor "ER Receptionist" as ER
-participant "Virtual ER System" as VERS
-participant "ER Queue" as Queue
-participant "Patient Data" as PD
+@startuml nurseCollaboration
+hide empty description
 
-ER --> VERS: Login
-VERS --> ER: Authentication Success
+ERReceptionist --> __:VirtualERSystem__ : 1: login()
+__:VirtualERSystem__ --> ERReceptionist : 2: authenticationSuccess()
+__:VirtualERSystem__ --> __:ERQueue__ : 3: requestPatientSchedule() 
+__:ERQueue__ --> __:VirtualERSystem__ : 4: displayPatientSchedule()
+__:VirtualERSystem__ --> __:ERQueue__ : 5: addPatient()
+__:ERQueue__ --> __:PatientData__ : 6: updatePosition()
+__:VirtualERSystem__ --> __:ERQueue__ : 7: setArrivalTime()
+__:PatientData__ --> __:ERQueue__ : 8: updateArrivalTime()
 
-ER --> Queue: Check for scheduled patients
-Queue --> ER: Show patient list
-
-ER --> Queue: Add walk-in patient to queue
-Queue --> PD: Update queue
-
-ER --> PD: Update patient arrival time
-PD --> Queue: Update queue with arrival time
 @enduml

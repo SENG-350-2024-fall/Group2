@@ -1,21 +1,12 @@
-@startuml CollaborationPatient
-actor Patient as P
-participant "Virtual ER System" as VERS
-participant "Questionnaire Service" as QS
-participant "Patient Data" as PD
-participant "Emergency Services (911)" as ES
+@startuml collaborationPatient
+hide empty description
 
-P --> VERS: Login
-VERS --> P: Authentication Success
-P --> QS: Fill out questionnaire
-QS --> VERS: Send questionnaire results
-VERS --> PD: Store results
-VERS --> P: Provide recommendations
+Patient --> __:VirtualERSystem__  : 1: login()
+__:VirtualERSystem__ --> Patient: 2: authenticationSuccess()
+__:VirtualERSystem__ --> __:QuestionnaireService__ : 3: takeQuestionnaire()
+__:QuestionnaireService__ --> __:VirtualERSystem__ : 4: sendResults()
+__:VirtualERSystem__ --> __:PatientData__ : 5: saveResults()
+__:VirtualERSystem__ --> __:Patient__ : 6: advisePatient()
+__:VirtualERSystem__ --> __:EmergencyServices__ : 7: notifyIfCritical()
 
-alt Critical condition
-  VERS --> ES: Notify emergency services
-  ES --> P: Advise patient to call 911
-else Non-critical condition
-  VERS --> P: Recommend clinic or other action
-end
 @enduml
