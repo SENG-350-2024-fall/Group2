@@ -1,0 +1,21 @@
+@startuml CollaborationPatient
+actor Patient as P
+participant "Virtual ER System" as VERS
+participant "Questionnaire Service" as QS
+participant "Patient Data" as PD
+participant "Emergency Services (911)" as ES
+
+P --> VERS: Login
+VERS --> P: Authentication Success
+P --> QS: Fill out questionnaire
+QS --> VERS: Send questionnaire results
+VERS --> PD: Store results
+VERS --> P: Provide recommendations
+
+alt Critical condition
+  VERS --> ES: Notify emergency services
+  ES --> P: Advise patient to call 911
+else Non-critical condition
+  VERS --> P: Recommend clinic or other action
+end
+@enduml

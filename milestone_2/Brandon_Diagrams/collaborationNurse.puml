@@ -1,0 +1,19 @@
+@startuml CollaborationNurse
+actor Nurse as N
+participant "Virtual ER System" as VERS
+participant "Patient Data" as PD
+participant "Doctor" as D
+
+N --> VERS: Login
+VERS --> PD: Get patient queue
+PD --> VERS: Return queue
+VERS --> N: Show queue
+N --> VERS: Select patient
+VERS --> PD: Get patient info
+PD --> VERS: Return info
+VERS --> N: Show info
+
+alt Critical
+  N --> D: Escalate to doctor
+end
+@enduml

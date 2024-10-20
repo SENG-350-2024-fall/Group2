@@ -1,0 +1,18 @@
+@startuml CollaborationERReceptionist
+actor "ER Receptionist" as ER
+participant "Virtual ER System" as VERS
+participant "ER Queue" as Queue
+participant "Patient Data" as PD
+
+ER --> VERS: Login
+VERS --> ER: Authentication Success
+
+ER --> Queue: Check for scheduled patients
+Queue --> ER: Show patient list
+
+ER --> Queue: Add walk-in patient to queue
+Queue --> PD: Update queue
+
+ER --> PD: Update patient arrival time
+PD --> Queue: Update queue with arrival time
+@enduml

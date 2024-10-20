@@ -1,0 +1,21 @@
+@startuml CollaborationITAdministrator
+actor "IT Administrator" as IT
+participant "Virtual ER System" as VERS
+participant "User Management" as UM
+participant "System Logs" as Logs
+participant "ER System" as ERS
+
+IT --> VERS: Login
+VERS --> IT: Authentication Success
+
+IT --> UM: Manage user accounts (add/remove)
+UM --> VERS: Update account information
+
+IT --> Logs: Monitor system logs
+Logs --> IT: Show system logs
+
+IT --> ERS: Ensure ER system connectivity
+ERS --> IT: Confirm connection
+
+IT --> VERS: Update system configurations
+@enduml

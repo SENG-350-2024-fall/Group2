@@ -1,1 +1,20 @@
+@startuml Deployment
+node "Patient's Device" {
+  [Web Browser] --> [Virtual ER Web App]
+}
 
+node "Virtual ER Server" {
+  [Questionnaire Service] --> [Database]
+  [Real-time ER Status Service] --> [Database]
+}
+
+node "ER System" {
+  [ER Queue] --> [Virtual ER Server]
+  [Doctors' Dashboard] --> [ER Queue]
+}
+
+[Patient's Device] --> [Virtual ER Server]
+[Virtual ER Server] --> [ER System]
+[Virtual ER Server] --> [Nurse/Clinician Hotline]
+[Virtual ER Server] --> [Emergency Services (911)]
+@enduml
