@@ -15,12 +15,12 @@ component Server {
     [ERController] as ec
     [AuthHandler] as auth
     [RequestHandler] as req
+}
 
-    database Database {
-        [ER Database] as ed
-        [User Database] as ud
-        [Credentials Database] as cd
-    }
+database Databases {
+    [ER Database] as ed
+    [User Database] as ud
+    [Credentials Database] as cd
 }
 
 ec - ERs
