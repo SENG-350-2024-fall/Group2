@@ -1,6 +1,6 @@
 @startuml Sequence
 actor Nurse
-participant "Virtual ER System" as ERSystem
+participant "Nurse Dashboard" as ERSystem
 participant "Patient Data" as PatientData
 participant "Doctor" as Doctor
 
