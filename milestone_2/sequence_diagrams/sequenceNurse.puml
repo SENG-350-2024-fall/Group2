@@ -1,0 +1,25 @@
+@startuml Sequence
+actor Nurse
+participant "Virtual ER System" as ERSystem
+participant "Patient Data" as PatientData
+participant "Doctor" as Doctor
+
+Nurse -> ERSystem: Login
+ERSystem -> Nurse: Authentication Success
+
+Nurse -> ERSystem: View patient queue
+ERSystem -> PatientData: Retrieve patient queue
+PatientData -> ERSystem: Return patient queue
+ERSystem -> Nurse: Show patient queue
+
+Nurse -> ERSystem: Select patient details
+ERSystem -> PatientData: Retrieve patient information
+PatientData -> ERSystem: Return patient information
+ERSystem -> Nurse: Display patient information
+
+alt Critical condition
+  Nurse -> Doctor: Escalate to doctor
+else Non-critical condition
+  Nurse -> Patient: Provide alternative care instructions
+end
+@enduml
