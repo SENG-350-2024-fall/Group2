@@ -6,5 +6,10 @@ ReviewPatientPopup --> CriticalStatusButton : Nurse clicks button to notify pati
 ReviewPatientPopup --> Close : Nurse clicks button to close popup
 ReviewPatientPopup --> DoctorDashboard : Nurse clicks to escalate patient to the doctor's dashboard
 ReviewPatientPopup --> PatientQuestionnaire : Nurse clicks to view patient questionnaire
+Close --> NurseDashboard : Return to Dashboard
+DoctorDashboard --> NurseDashboard : Nurse escalates patient, returns to dashboard
+CriticalStatusButton --> NurseDashboard : Nurse sets critical status, returns to dashboard
+PatientQuestionnaire --> NurseDashboard : Nurse clicks close on patient questionnaire
+ReviewPatientPopup --> NurseDashboard : Nurse clicks off popup
 
 @enduml
