@@ -1,13 +1,13 @@
 @startuml nurseCollaboration
 hide empty description
 
-ERReceptionist --> __:VirtualERSystem__ : 1: login()
-__:VirtualERSystem__ --> ERReceptionist : 2: authenticationSuccess()
+ERReceptionistDashboard --> __:VirtualERSystem__ : 1: login()
+__:VirtualERSystem__ --> ERReceptionistDashboard : 2: authenticationSuccess()
 __:VirtualERSystem__ --> __:ERQueue__ : 3: requestPatientSchedule() 
 __:ERQueue__ --> __:VirtualERSystem__ : 4: displayPatientSchedule()
 __:VirtualERSystem__ --> __:ERQueue__ : 5: addPatient()
 __:ERQueue__ --> __:PatientData__ : 6: updatePosition()
 __:VirtualERSystem__ --> __:ERQueue__ : 7: setArrivalTime()
-__:PatientData__ --> __:ERQueue__ : 8: updateArrivalTime()
+__:ERQueue__ --> __:PatientData__ : 8: updateArrivalTime()
 
 @enduml

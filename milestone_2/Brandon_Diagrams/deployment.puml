@@ -1,6 +1,8 @@
 @startuml Deployment
 node "Patient's Device" {
   [Web Browser] --> [Virtual ER Web App]
+  [Web Browser] --> [Sever (node.js)]
+  [Web Browser] --> [database]
 }
 
 node "Virtual ER Server" {
