@@ -1,14 +1,10 @@
 @startuml State
-[*] --> Idle
 
-Idle --> LoggedIn : Nurse logs in
-LoggedIn --> ViewingQueue : Nurse views patient queue
-ViewingQueue --> ReviewingPatient : Nurse selects patient from queue
-ReviewingPatient --> HandlingCritical : Patient is critical
-ReviewingPatient --> ProvidingGuidance : Patient is non-critical
+[*] --> NurseDashboard : Nurse logs into the nurse dashboard
+NurseDashboard --> ReviewPatientPopup : Nurse clicks on patient in the queue
+ReviewPatientPopup --> CriticalStatusButton : Nurse clicks button to notify patient of critical status
+ReviewPatientPopup --> Close : Nurse clicks button to close popup
+ReviewPatientPopup --> DoctorDashboard : Nurse clicks to escalate patient to the doctor's dashboard
+ReviewPatientPopup --> PatientQuestionnaire : Nurse clicks to view patient questionnaire
 
-HandlingCritical --> LoggedIn : Patient escalated to doctor
-ProvidingGuidance --> LoggedIn : Nurse provides guidance
-
-[*] --> LoggedIn : Login success
 @enduml
