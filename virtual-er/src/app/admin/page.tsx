@@ -12,24 +12,7 @@ import {
     TableRow,
   } from "@/components/ui/table"
 
-  const users = [
-    {
-      user: "Raf",
-      status: "Healthy",
-      ER: "Royal Jubilee",
-    },
-    {
-      user: "Matt",
-      status: "Sick",
-      ER: "North Quadra Urgent Care",
-    },
-    {
-      user: "Sam",
-      status: "Critical",
-      ER: "Victoria General",
-    },
-
-  ]
+  import type { User } from "../../../interfaces";
 
   const emergencyRooms = [
     {
@@ -50,7 +33,14 @@ import {
 
   ]
 
-export default function Page() {
+
+
+export default async function Page() {
+
+  let data = await fetch(`${process.env.PUBLIC_APP_URL}/api/users`)
+  let users = await data.json()
+  console.log(users)
+
     return (
       <div className="relative min-h-screen"> {/* Added padding to the container */}
         <Header title="Admin Dashboard" />
@@ -64,16 +54,14 @@ export default function Page() {
                         <TableHeader>
                             <TableRow>
                             <TableHead className="w-[100px]">User</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead>Closest ER</TableHead>
+                            <TableHead>Name</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {users.map((user) => (
-                            <TableRow key={user.user}>
-                                <TableCell className="font-medium">{user.user}</TableCell>
-                                <TableCell>{user.status}</TableCell>
-                                <TableCell>{user.ER}</TableCell>
+                            {users.map((user: User) => (
+                            <TableRow key={user.id}>
+                                <TableCell className="font-medium">{user.id}</TableCell>
+                                <TableCell>{user.name}</TableCell>
                             </TableRow>
                             ))}
                         </TableBody>
