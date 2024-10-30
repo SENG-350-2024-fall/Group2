@@ -8,5 +8,19 @@
             "id": 2,
             "name": "raf"
         }
+    ],
+    "ers": [
+        {
+            "id": 1,
+            "name": "Vic Gen",
+            "capacity": 200,
+            "waitTime": 3
+        },
+        {
+            "id": 2,
+            "name": "Jubilee",
+            "capacity": 120,
+            "waitTime": 5
+        }
     ]
 }
