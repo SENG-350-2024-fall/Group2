@@ -19,7 +19,6 @@ const interval = setInterval(() => {
 }, 5000);
 
 export default function Header({ title, ERName }: HeaderProps) {
-  // Clear interval when component unmounts (alternative cleanup approach)
   if (typeof window !== "undefined") {
     window.addEventListener("beforeunload", () => clearInterval(interval));
   }
@@ -30,9 +29,9 @@ export default function Header({ title, ERName }: HeaderProps) {
       <div className="flex items-center space-x-2">
         <span className="text-sm text-gray-600">
           {title !== "" ? `Signed in as ${title}` : ""}
-        </span>
+        </span> {/* With {title} we can display a specific user type for each page where the title bar is used. Ex: <Header title="Healthcare Professional"/> */}
         <Link href="/login">
-          <Button variant="outline">{title === "" ? "Login" : "Logout"}</Button>
+          <Button variant="outline">{title == "" ? "Login" : "Logout"}</Button>
         </Link>
       </div>
     </div>
