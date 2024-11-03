@@ -1,12 +1,15 @@
-"use client"; // Add this directive at the top of the file
+"use client";
 
-import Header from "@/components/ui/header";
-
-import * as React from "react";
 import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Card, CardContent, CardHeader } from "@/components/ui/card"; // to display ER details
+import Header from "@/components/ui/header";
 import { Input } from "@/components/ui/input"; // for scheduling appointments
-import { Card, CardHeader, CardContent } from "@/components/ui/card"; // to display ER details
+import PatientQuestionnaire from "@/components/ui/PatientQuestionaire"; // Import the questionnaire component
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import * as React from "react";
+
+import { useEffect } from "react";
+import type { ER } from "../../../interfaces";
 
 // Sample data for nearby emergency rooms
 const initialERs = [
@@ -28,7 +31,23 @@ const initialERs = [
 ];
 
 export default function PatientPage() {
-  const [ERs, setERs] = React.useState(initialERs);
+  const [ERs, setERs] = React.useState<ER[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/ers`);
+        let ERList = await result.json();
+        console.log(ERList);
+        setERs(ERList);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  });
+
   const [appointments, setAppointments] = React.useState<string[]>([]);
   const [newAppointment, setNewAppointment] = React.useState("");
 
@@ -58,11 +77,17 @@ export default function PatientPage() {
               </CardHeader>
               <CardContent>
                 <p>Wait Time: {er.waitTime}</p>
-                <p>Condition: {er.condition}</p>
+                <p>Capacity: {er.capacity}</p>
               </CardContent>
             </Card>
           ))}
         </div>
+      </div>
+
+      {/* Medical Questionnaire */}
+      <div className="mt-10">
+        <h2 className="text-xl font-bold">Patient Questionnaire</h2>
+        <PatientQuestionnaire /> {/* Render the PatientQuestionnaire component */}
       </div>
 
       {/* Schedule an Appointment */}
@@ -112,4 +137,3 @@ export default function PatientPage() {
     </div>
   );
 }
-

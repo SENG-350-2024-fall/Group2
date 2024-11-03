@@ -1,0 +1,76 @@
+{
+    "users": [
+        {
+            "id": 1,
+            "name": "matt"
+        },
+        {
+            "id": 2,
+            "name": "raf"
+        }
+    ],
+    "ers": [
+        {
+            "id": 1,
+            "name": "Vic Gen",
+            "capacity": 200,
+            "waitTime": 3
+        },
+        {
+            "id": 2,
+            "name": "Jubilee",
+            "capacity": 120,
+            "waitTime": 5
+        }
+    ],
+    "patients": [
+        {
+            "PatientName": "Brock Break",
+            "SeverityOfIllness": "Extreme",
+            "RelevantInformation": "Shattered femur, needs urgent surgery",
+            "PositionInQueue": "0 (Current Patient)",
+            "RoomNumber": 115,
+            "severityRank": 1
+          },
+          {
+            "PatientName": "Gail Rupture",
+            "SeverityOfIllness": "Extreme",
+            "RelevantInformation": "Severe head trauma",
+            "PositionInQueue": "1",
+            "RoomNumber": 155,
+            "severityRank": 1
+          },
+          {
+            "PatientName": "Carrie Concussion",
+            "SeverityOfIllness": "Major",
+            "RelevantInformation": "Can't see straight, severe dizziness and nausea",
+            "PositionInQueue": "2",
+            "RoomNumber": 105,
+            "severityRank": 2
+          },
+          {
+            "PatientName": "Billie Hurt",
+            "SeverityOfIllness": "Moderate",
+            "RelevantInformation": "Some lower back pain from car accident",
+            "PositionInQueue": "3",
+            "RoomNumber": 145,
+            "severityRank": 3
+          },
+          {
+            "PatientName": "Johnny Bruise",
+            "SeverityOfIllness": "Minor",
+            "RelevantInformation": "Indicated pain on the ridge of his foot",
+            "PositionInQueue": "4",
+            "RoomNumber": 125,
+            "severityRank": 4
+          },
+          {
+            "PatientName": "Wanda Whiplash",
+            "SeverityOfIllness": "Minor",
+            "RelevantInformation": "Some pain in lower back",
+            "PositionInQueue": "5",
+            "RoomNumber": 122,
+            "severityRank": 4
+          }
+    ]
+}
