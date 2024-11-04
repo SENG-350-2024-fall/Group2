@@ -1,14 +1,26 @@
-﻿@startuml
+@startuml
 actor Doctor
 Doctor -> AuthenticationServer: Login authentication request
 AuthenticationServer --> Doctor: Authentication granted
+
+alt Authentication failed
+    AuthenticationServer --> Doctor: Authentication failed
+end
 
 Doctor -> "Healthcare Dashboard": Load dashboard and patient queue
 database ERData as "ER Data"
 "Healthcare Dashboard" -> ERData: Query respective doctor's ER patient queue
 ERData --> "Healthcare Dashboard": Return query results
+alt Query Failure
+    ERData  --> "Healthcare Dashboard": Fetch data failure
+end
 "Healthcare Dashboard" -> "Local Cache": Save patient data locally within application
 "Local Cache" --> "Healthcare Dashboard": Saved successfully
+
+alt Data save failure
+    "Local Cache" --> "Healthcare Dashboard": Save failed
+end
+
 "Healthcare Dashboard" --> Doctor: Display patient queue
 
 Doctor -> "Healthcare Dashboard": View current patient button clicked
