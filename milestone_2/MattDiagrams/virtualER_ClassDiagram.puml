@@ -15,6 +15,7 @@ class Patient {
 
 class MedicalStaff {
     homeER: ER
+    schedule: dateTime[]
 }
 
 class Nurse {
@@ -25,12 +26,15 @@ class Doctor {
     patientsToSee: ER_Request[]
 }
 
-class ER_Secretary {
+class Receptionist {
+    callPatient(ID: integer)
 }
 
 class AppAdmin {
     void addUser(name: string, address: string, birthdate: date, sex: string)
     void addER(name: string, address: string, maxCapacity: integer)
+    void viewUser(ID: integer)
+    void viewER(ID: integer)
     void removeUser(ID: integer)
     void removeER(ID: integer)
 }
@@ -59,6 +63,7 @@ class ER_Request {
   doctorsNotes: string
   triaged: boolean
   questionaire: Questionaire
+  roomNumber: integer
   void updateQueue(position: integer)
   integer minutesInQueue()
   void removeFromQueue()
@@ -79,7 +84,7 @@ User <|-- Patient
 User <|-- MedicalStaff
 MedicalStaff <|-- Doctor
 MedicalStaff <|-- Nurse
-MedicalStaff <|-- ER_Secretary
+MedicalStaff <|-- Receptionist
 User <|-- AppAdmin
 
 ER "  1" o-- "*" MedicalStaff
