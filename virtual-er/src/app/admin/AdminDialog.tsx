@@ -33,7 +33,7 @@ const formSchema = z.object({
   name: z.string().min(2, {
     message: "Username must be at least 2 characters.",
   }),
-  capacity: z.number()
+  capacity: z.string()
 })
 
 interface HeaderProps {
@@ -59,7 +59,7 @@ export function AdminDialog({ add }: HeaderProps) {
     const ERobject: ER = {
       id: 0,
       name: values.name,
-      capacity: values.capacity
+      capacity: parseInt(values.capacity)
     };
 
     const UserObject: ER = {
@@ -119,7 +119,7 @@ export function AdminDialog({ add }: HeaderProps) {
               <FormItem>
                 <FormLabel>Capacity</FormLabel>
                 <FormControl>
-                  <Input placeholder="" type="number" {...field} />
+                  <Input placeholder="" {...field} />
                 </FormControl>
                 <FormDescription>
                   Capacity of ER.
