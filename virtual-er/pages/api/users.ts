@@ -14,7 +14,6 @@ async function getUsers(): Promise<User[]> {
       throw new Error(response.statusText);
     }
 
-    //    And can also be used here ↴
     return await response.json() as User[];
 }
 
