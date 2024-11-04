@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
 import { User } from "next-auth"
+import { twMerge } from "tailwind-merge"
 import { UserData } from "./types"
 
 export function cn(...inputs: ClassValue[]) {
@@ -22,28 +22,28 @@ export async function getUserFromDb(email: unknown, pwHash: string | null): Prom
     {
       id: "1",
       email: "admin@mail.com",
-      pwHash: "admin",
+      pwHash: "adminadmin",
       name: "Admin",
       role: "admin"
     },
     {
       id: "2",
       email: "patient@mail.com",
-      pwHash: "patient",
+      pwHash: "patientpatient",
       name: "Patient",
       role: "patient"
     },
     {
       id: "3",
       email: "doctor@mail.com",
-      pwHash: "doctor",
+      pwHash: "doctordoctor",
       name: "Doctor",
       role: "doctor"
     },
     {
       id: "4",
       email: "nurse@mail.com",
-      pwHash: "nurse",
+      pwHash: "nursenurse",
       name: "Nurse",
       role: "nurse"
     },

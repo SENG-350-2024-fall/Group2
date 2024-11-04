@@ -1,8 +1,9 @@
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 // Your own logic for dealing with plaintext password strings; be careful!
-import { saltAndHashPassword } from "@/lib/utils"
-import { getUserFromDb } from "@/lib/utils"
+import { getUserFromDb, saltAndHashPassword } from "@/lib/utils"
+import { ZodError } from "zod"
+import { credentialsSchema } from "./lib/zod"
  
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -14,22 +15,33 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: {},
       },
       authorize: async (credentials) => {
-        let user = null
- 
-        // logic to salt and hash password
-        const pwHash = saltAndHashPassword(credentials.password)
- 
-        // logic to verify if the user exists
-        user = await getUserFromDb(credentials.email, pwHash)
- 
-        if (!user) {
-          // No user found, so this is their first attempt to login
-          // meaning this is also the place you could do registration
-          throw new Error("User not found.")
+        try {
+          let user = null
+  
+          const { email, password } = await credentialsSchema.parseAsync(credentials)
+   
+          // logic to salt and hash password
+          const pwHash = saltAndHashPassword(password)
+   
+          // logic to verify if the user exists
+          user = await getUserFromDb(email, pwHash)
+   
+          if (!user) {
+            // No user found, so this is their first attempt to login
+            // meaning this is also the place you could do registration
+            throw new Error("User not found.")
+          }
+   
+          // return user object with their profile data
+          return user
+        } catch (error) {
+          if (error instanceof ZodError) {
+            // This error is thrown by Zod when the credentials are invalid
+            return null
+          }
+
+          return null
         }
- 
-        // return user object with their profile data
-        return user
       },
     }),
   ],
