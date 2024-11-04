@@ -9,22 +9,17 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { signInSchema } from "@/lib/zod";
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
+import { signIn } from "next-auth/react";
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from './button';
-
-const formSchema = z.object({
-    email: z.string().email({ message: 'Invalid email address' }),
-    password: z.string().min(8, { message: 'Password is too short' }),
-});
+import { RadioGroup, RadioGroupItem } from "./radio-group";
 
 export default function LoginForm() {
-    const router = useRouter();
-
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+    const form = useForm<z.infer<typeof signInSchema>>({
+        resolver: zodResolver(signInSchema),
         defaultValues: {
             email: '',
             password: '',
@@ -69,14 +64,59 @@ export default function LoginForm() {
         )}
     />
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        if (values.email.includes("healthcareprofessional")) {
-            router.push("/healthcareprofessional");
-        } else if (values.email.includes("patient")) {
-            router.push("/patient");
-        } else if (values.email.includes("admin")) {
-            router.push("/er-staff")
+    const userTypeField = <FormField
+        control={form.control}
+        name='user_type'
+        render={({ field }) => (
+            <FormItem>
+                <FormLabel>User Type</FormLabel>
+                <FormControl>
+                    <RadioGroup
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        className="flex flex-col space-y-1"
+                    >
+                        <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormControl>
+                                <RadioGroupItem value="admin" />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                                Admin
+                            </FormLabel>
+                        </FormItem>
+                        <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormControl>
+                                <RadioGroupItem value="patient" />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                                Patient
+                            </FormLabel>
+                        </FormItem>
+                        <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormControl>
+                                <RadioGroupItem value="hcp" />
+                            </FormControl>
+                            <FormLabel className="font-normal">Healthcare Professional</FormLabel>
+                        </FormItem>
+                    </RadioGroup>
+                </FormControl>
+                <FormMessage />
+            </FormItem>
+        )}
+    />
+
+    function onSubmit(values: z.infer<typeof signInSchema>) {
+        const { email, password } = values;
+        let redirect = '/';
+        if (values.user_type === 'admin') {
+            redirect = '/admin';
+        } else if (values.user_type === 'hcp') {
+            redirect = '/healthcareprofessional';
+        } else if (values.user_type === 'patient') {
+            redirect = '/patient';
         }
+
+        signIn("credentials", { email, password, redirectTo: redirect });
     }
 
     return (
@@ -84,7 +124,8 @@ export default function LoginForm() {
             <form onSubmit={form.handleSubmit(onSubmit)} className="m-auto space-y-3">
                 {emailField}
                 {passwordField}
-                <Button type="submit">Submit</Button>
+                {userTypeField}
+                <Button type="submit">Login</Button>
             </form>
         </Form>
     )
