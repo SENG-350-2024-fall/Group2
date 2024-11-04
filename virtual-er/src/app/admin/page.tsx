@@ -14,6 +14,8 @@ import {
     TableRow,
   } from "@/components/ui/table"
 
+import { AdminDialog } from "./AdminDialog";
+
 import type { User, ER } from "../../../interfaces";
 import React, { useEffect } from "react";
 
@@ -68,7 +70,7 @@ export default function Page() {
                         </TableBody>
                     </Table>
 
-                    <Button>Add User</Button>
+                    <AdminDialog add="User"></AdminDialog>
                 </div>
 
                 <div className="p-6">
@@ -95,7 +97,7 @@ export default function Page() {
                         </TableBody>
                     </Table>
 
-                    <Button>Add ER</Button>
+                    <AdminDialog add="ER"></AdminDialog>
                 </div>
           </div>
         </div>
