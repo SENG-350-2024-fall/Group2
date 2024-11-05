@@ -4,6 +4,13 @@ import { useEffect, useState } from "react";
 import { ER } from "../../../../interfaces";
 import { Card, CardContent, CardHeader } from "../card";
 
+// Custom iterator generator function for ERs
+function* ERIterator(ERs: ER[]) {
+    for (const er of ERs) {
+        yield er;
+    }
+}
+
 export default function NearbyERs() {
     const [ERs, setERs] = useState<ER[]>([]);
 
@@ -22,9 +29,11 @@ export default function NearbyERs() {
         fetchData();
     })
 
+    const erIterator = ERIterator(ERs);
+
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-5"> {/* Responsive grid */}
-            {ERs.map((er, index) => (
+            {Array.from(erIterator).map((er, index) => (
                 <Card key={index}>
                     <CardHeader>
                         <h3>{er.name}</h3>
