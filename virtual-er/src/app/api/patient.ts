@@ -1,5 +1,6 @@
+import { checkRoleList } from "@/lib/actions";
 import type { NextApiRequest, NextApiResponse } from "next";
-import type { Patient } from "../../interfaces";
+import type { Patient } from "../../../interfaces";
 
 
 async function getPatients(): Promise<Patient[]> {
@@ -22,6 +23,10 @@ export default async function handler(
   _req: NextApiRequest,
   res: NextApiResponse<Patient[]>,
 ) {
+  if (!await checkRoleList("doctor", "nurse", "receptionist")) {
+    res.status(401);
+  }
+
   try {
     console.log(_req.body);
     res.status(200).json(await getPatients());

@@ -1,9 +1,10 @@
+import { checkRole } from "@/lib/actions";
 import type { NextApiRequest, NextApiResponse } from "next";
-import type { ER } from "../../interfaces";
+import type { User } from "../../../interfaces";
 
 
-async function getERs(): Promise<ER[]> {
-    const response = await fetch(`${process.env.JSON_DB_URL}/ers`, {
+async function getUsers(): Promise<User[]> {
+    const response = await fetch(`${process.env.JSON_DB_URL}/users`, {
         method: "get",
         headers: {
             "Content-Type": "application/json"
@@ -14,16 +15,19 @@ async function getERs(): Promise<ER[]> {
       throw new Error(response.statusText);
     }
 
-    //    And can also be used here ↴
-    return await response.json() as ER[];
+    return await response.json() as User[];
 }
 
 export default async function handler(
   _req: NextApiRequest,
-  res: NextApiResponse<ER[]>,
+  res: NextApiResponse<User[]>,
 ) {
+  if (!await checkRole("admin")) {
+    res.status(401);
+  }
+  
   try {
-    res.status(200).json(await getERs());
+    res.status(200).json(await getUsers());
   } catch(e) {
     console.error(e)
     res.status(400)

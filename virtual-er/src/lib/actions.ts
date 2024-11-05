@@ -51,6 +51,14 @@ export async function getRole() {
     return ""
 }
 
+export async function checkRole(role: string) {
+    return await getRole() === role
+}
+
+export async function checkRoleList(...roles: string[]) {
+    return roles.includes(await getRole())
+}
+
 export async function protectPageForRole(role: string) {
     if (await getRole() !== role) {
         redirect("/login", RedirectType.replace);

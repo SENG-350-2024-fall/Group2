@@ -1,6 +1,6 @@
+import { checkRole } from "@/lib/actions";
 import type { NextApiRequest, NextApiResponse } from "next";
-import type { ER } from "../../interfaces";
-
+import type { ER } from "../../../interfaces";
 
 async function postER(PostObject: ER) {
     const response = await fetch(`${process.env.JSON_DB_URL}/ers`, {
@@ -21,6 +21,10 @@ export default async function handler(
   _req: NextApiRequest,
   res: NextApiResponse<ER>,
 ) {
+  if (!await checkRole("admin")) {
+    res.status(401);
+  }
+
   try {
     await postER(_req.body);
     res.status(200);
