@@ -2,11 +2,11 @@ import Header from "@/components/ui/header";
 import AppointmentManager from "@/components/ui/patient/appointmentManager";
 import NearbyERs from "@/components/ui/patient/nearbyERs";
 import PatientQuestionnaire from "@/components/ui/patient/PatientQuestionaire"; // Import the questionnaire component
-import { checkRole } from "@/lib/actions";
+import { protectPageForRole } from "@/lib/actions";
 import * as React from "react";
 
 export default async function PatientPage() {
-  await checkRole("patient");
+  await protectPageForRole("patient");
 
   return (
     <div className="relative min-h-screen p-6"> {/* Added padding to the container */}

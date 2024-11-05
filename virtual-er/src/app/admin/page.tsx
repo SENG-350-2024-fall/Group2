@@ -2,10 +2,10 @@ import AdminDialog from "@/components/ui/admin/AdminDialog";
 import AdminERs from "@/components/ui/admin/ers";
 import AdminUsers from "@/components/ui/admin/users";
 import Header from "@/components/ui/header";
-import { checkRole } from "@/lib/actions";
+import { protectPageForRole } from "@/lib/actions";
 
 export default async function Page() {
-  await checkRole("admin");
+  await protectPageForRole("admin");
 
   return (
     <div className="relative min-h-screen"> {/* Added padding to the container */}

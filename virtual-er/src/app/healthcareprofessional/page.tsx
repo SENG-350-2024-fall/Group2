@@ -1,9 +1,9 @@
 import HCPDashboard from "@/components/ui/hcp/HCPDashboard";
 import Header from "@/components/ui/header";
-import { checkRole, checkRoleList, getRole } from "@/lib/actions";
+import { getRole, protectPageForRoleList } from "@/lib/actions";
 
 export default async function Page() {
-  await checkRoleList("doctor", "nurse", "receptionist");
+  await protectPageForRoleList("doctor", "nurse", "receptionist");
   const role = await getRole();
 
   return (

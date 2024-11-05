@@ -51,13 +51,13 @@ export async function getRole() {
     return ""
 }
 
-export async function checkRole(role: string) {
+export async function protectPageForRole(role: string) {
     if (await getRole() !== role) {
         redirect("/login", RedirectType.replace);
     }
 }
 
-export async function checkRoleList(...roles: string[]) {
+export async function protectPageForRoleList(...roles: string[]) {
     const userRole = await getRole();
     if (!roles.includes(userRole)) {
         redirect("/login", RedirectType.replace);
