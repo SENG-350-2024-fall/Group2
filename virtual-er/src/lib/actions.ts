@@ -1,32 +1,39 @@
 import { auth } from "@/auth";
-import { User } from "next-auth";
 import { redirect, RedirectType } from "next/navigation";
 import { UserData } from "./types";
 
-async function getUsers(): Promise<UserData[]> {
-    const response = await fetch(`${process.env.JSON_DB_URL}/credentials`, {
+async function getUser(email: string): Promise<UserData | null> {
+    const response = await fetch(`${process.env.JSON_DB_URL}/credentials?email=${email}`, {
         method: "get",
         headers: {
             "Content-Type": "application/json"
         }
     });
-
+    
     if (!response.ok) {
-        throw new Error(response.statusText);
+        return null;
     }
 
-    return await response.json();
+    const data = await response.json();
+
+    if (data.length === 0) {
+        return null;
+    }
+
+    return data[0];
 }
 
-export async function getUserFromDb(email: unknown, pwHash: string | null): Promise<User | null> {
+export async function getUserFromDb(email: unknown, pwHash: string | null): Promise<UserData | null> {
     if (typeof email !== "string" || pwHash === null) return null
 
-    const users = await getUsers()
+    const user = await getUser(email)
 
-    for (const user of users) {
-        if (user.email === email && user.pwHash === pwHash) {
-            return user
-        }
+    if (user === null) {
+        return null
+    }
+
+    if (user.pwHash === pwHash) {
+        return user;
     }
 
     return null
@@ -40,15 +47,9 @@ export async function getRole() {
 
     const email = session.user.email
 
-    const users = await getUsers()
+    const user = await getUser(email);
 
-    for (const user of users) {
-        if (user.email === email) {
-            return user.role
-        }
-    }
-
-    return ""
+    return user?.role || ""
 }
 
 export async function checkRole(role: string) {
