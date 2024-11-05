@@ -1,43 +1,39 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card"; // to display ER details
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Header from "@/components/ui/header";
-import { Input } from "@/components/ui/input"; // for scheduling appointments
-import PatientQuestionnaire from "@/components/ui/PatientQuestionaire"; // Import the questionnaire component
+import { Input } from "@/components/ui/input";
+import PatientQuestionnaire from "@/components/ui/PatientQuestionaire";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import * as React from "react";
-
 import { useEffect } from "react";
-import type { ER } from "../../../interfaces";
 
-// Sample data for nearby emergency rooms
-const initialERs = [
-  {
-    name: "City General Hospital",
-    waitTime: "30 mins",
-    condition: "Moderate",
-  },
-  {
-    name: "Metro Health Center",
-    waitTime: "1 hour",
-    condition: "Busy",
-  },
-  {
-    name: "Downtown Clinic",
-    waitTime: "15 mins",
-    condition: "Quiet",
-  },
-];
+// Define the ER interface
+interface ER {
+  name: string;
+  waitTime: string;
+  condition: string;
+  capacity?: string;
+}
+
+// Custom iterator generator function for ERs
+function* ERIterator(ERs: ER[]) {
+  for (const er of ERs) {
+    yield er;
+  }
+}
 
 export default function PatientPage() {
   const [ERs, setERs] = React.useState<ER[]>([]);
+  const [appointments, setAppointments] = React.useState<string[]>([]);
+  const [newAppointment, setNewAppointment] = React.useState("");
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const result = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/ers`);
-        let ERList = await result.json();
+        const ERList: ER[] = await result.json();
         console.log(ERList);
         setERs(ERList);
       } catch (error) {
@@ -46,10 +42,7 @@ export default function PatientPage() {
     };
 
     fetchData();
-  });
-
-  const [appointments, setAppointments] = React.useState<string[]>([]);
-  const [newAppointment, setNewAppointment] = React.useState("");
+  }, []);
 
   const addAppointment = () => {
     if (newAppointment.trim()) {
@@ -62,22 +55,25 @@ export default function PatientPage() {
     setAppointments((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const erIterator = ERIterator(ERs);
+
   return (
-    <div className="relative min-h-screen p-6"> {/* Added padding to the container */}
+    <div className="relative min-h-screen p-6">
       <Header title="Patient Dashboard" />
 
       {/* Nearby Emergency Rooms */}
       <div className="mt-10">
         <h2 className="text-xl font-bold">Nearby Emergency Rooms</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-5"> {/* Responsive grid */}
-          {ERs.map((er, index) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
+          {Array.from(erIterator).map((er, index) => (
             <Card key={index}>
               <CardHeader>
                 <h3>{er.name}</h3>
               </CardHeader>
               <CardContent>
                 <p>Wait Time: {er.waitTime}</p>
-                <p>Capacity: {er.capacity}</p>
+                <p>Condition: {er.condition}</p>
+                {er.capacity && <p>Capacity: {er.capacity}</p>}
               </CardContent>
             </Card>
           ))}
@@ -87,7 +83,7 @@ export default function PatientPage() {
       {/* Medical Questionnaire */}
       <div className="mt-10">
         <h2 className="text-xl font-bold">Patient Questionnaire</h2>
-        <PatientQuestionnaire /> {/* Render the PatientQuestionnaire component */}
+        <PatientQuestionnaire />
       </div>
 
       {/* Schedule an Appointment */}
@@ -98,7 +94,7 @@ export default function PatientPage() {
             placeholder="Enter appointment details"
             value={newAppointment}
             onChange={(e) => setNewAppointment(e.target.value)}
-            className="w-full max-w-md" // Limit the width of the input
+            className="w-full max-w-md"
           />
           <Button onClick={addAppointment} className="ml-4">
             Schedule
