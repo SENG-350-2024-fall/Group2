@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import Link from "next/link";
 import LoginButton from "./auth/loginButton";
 import LogoutButton from "./auth/logoutButton";
-import RoleMessage from "./roleMessage";
+import RoleMessage from "./auth/roleMessage";
 
 interface HeaderProps {
   ERName?: string;

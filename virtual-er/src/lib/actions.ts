@@ -32,7 +32,14 @@ export async function getUserFromDb(email: unknown, pwHash: string | null): Prom
     return null
 }
 
-export async function getRole(email: string) {
+export async function getRole() {
+    const session = await auth();
+    if (!session?.user?.email) {
+        return ""
+    }
+
+    const email = session.user.email
+
     const users = await getUsers()
 
     for (const user of users) {
@@ -45,13 +52,14 @@ export async function getRole(email: string) {
 }
 
 export async function checkRole(role: string) {
-    const session = await auth();
-    if (session?.user?.email) {
-        const userRole = await getRole(session.user.email);
-        if (userRole === role) {
-            return
-        }
+    if (await getRole() !== role) {
+        redirect("/login", RedirectType.replace);
     }
+}
 
-    redirect("/login", RedirectType.replace);
+export async function checkRoleList(...roles: string[]) {
+    const userRole = await getRole();
+    if (!roles.includes(userRole)) {
+        redirect("/login", RedirectType.replace);
+    }
 }
