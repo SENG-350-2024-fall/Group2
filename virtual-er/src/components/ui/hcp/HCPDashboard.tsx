@@ -1,9 +1,5 @@
 "use client"; // Add this directive at the top of the file
 
-import type { Patient } from "@/lib/interfaces";
-import * as React from "react";
-import { useEffect, useState } from "react";
-
 import { Button } from "@/components/ui/button";
 import {
     Table,
@@ -13,6 +9,12 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import type { Patient } from "@/lib/interfaces";
+import * as React from "react";
+import { useEffect, useState } from "react";
+import io, { Socket } from "socket.io-client";
+
+let socket: Socket;
 
 const initialPatients: Patient[] = [
     // {
@@ -76,12 +78,28 @@ interface HCPDashboardProps {
 }
 
 export default function HCPDashboard({ role }: HCPDashboardProps) {
-    const [patients, setPatients] = React.useState<Patient[]>([]);
+    useEffect(() => {
+        const socketInitializer = async () => {
+            await fetch('/api/socket');
+            socket = io();
 
+            socket.on('connect', () => {
+                console.log('connected')
+            })
+
+            socket.on('update-patients', updatePatients => {
+                setPostingData(true);
+                setPostingData(false); // trigger a re-fetch
+            })
+        }
+
+        socketInitializer()
+    }, []);
+
+    const [patients, setPatients] = React.useState<Patient[]>([]);
     const [postingData, setPostingData] = useState(false); // is there currently a post request
 
     // add useEffect for checking user type
-
     useEffect(() => {
         if (postingData) return; // Avoid fetching while posting data
 
@@ -120,6 +138,7 @@ export default function HCPDashboard({ role }: HCPDashboardProps) {
     }
       */
             setPostingData(false); // Reset postingData after successful post
+            socket.emit('patient-change', updatedPatients);
         } catch (error) {
             console.error('Error posting data:', error);
             setPostingData(false); // Reset on error too

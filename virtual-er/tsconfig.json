@@ -33,7 +33,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "pages/api/socket.js"  ],
   "exclude": [
     "node_modules"
   ]
