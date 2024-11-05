@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import { ER } from "../../../interfaces";
-import { Card, CardContent, CardHeader } from "./card";
+import { ER } from "../../../../interfaces";
+import { Card, CardContent, CardHeader } from "../card";
 
 export default function NearbyERs() {
     const [ERs, setERs] = useState<ER[]>([]);

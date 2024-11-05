@@ -1,9 +1,9 @@
 'use client'
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useState } from "react";
-import { Button } from "./button";
-import { Input } from "./input";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./table";
 
 export default function AppointmentManager() {
     const [appointments, setAppointments] = useState<string[]>([]);

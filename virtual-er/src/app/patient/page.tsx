@@ -1,7 +1,7 @@
-import AppointmentManager from "@/components/ui/appointmentManager";
 import Header from "@/components/ui/header";
-import NearbyERs from "@/components/ui/nearbyERs";
-import PatientQuestionnaire from "@/components/ui/PatientQuestionaire"; // Import the questionnaire component
+import AppointmentManager from "@/components/ui/patient/appointmentManager";
+import NearbyERs from "@/components/ui/patient/nearbyERs";
+import PatientQuestionnaire from "@/components/ui/patient/PatientQuestionaire"; // Import the questionnaire component
 import { checkRole } from "@/lib/actions";
 import * as React from "react";
 
