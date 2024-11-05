@@ -39,6 +39,12 @@ export async function getUserFromDb(email: unknown, pwHash: string | null): Prom
     return null
 }
 
+export async function getRoleFromEmail(email: string): Promise<string> {
+    const user = await getUser(email);
+
+    return user?.role || ""
+}
+
 export async function getRole() {
     const session = await auth();
     if (!session?.user?.email) {
