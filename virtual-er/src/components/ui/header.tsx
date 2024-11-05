@@ -1,13 +1,6 @@
 import { Button } from "@/components/ui/button";
-import {
-  Menubar,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-  MenubarSeparator,
-  MenubarTrigger,
-} from "@/components/ui/menubar";
 import Link from "next/link";
+import LoginButton from "./loginButton";
 
 interface HeaderProps {
   title: string;
@@ -18,7 +11,7 @@ const interval = setInterval(() => {
   console.log("Online");
 }, 5000);
 
-export default function Header({ title, ERName }: HeaderProps) {
+export default async function Header({ title, ERName }: HeaderProps) {
   if (typeof window !== "undefined") {
     window.addEventListener("beforeunload", () => clearInterval(interval));
   }
@@ -31,7 +24,7 @@ export default function Header({ title, ERName }: HeaderProps) {
           {title !== "" ? `Signed in as ${title}` : ""}
         </span> {/* With {title} we can display a specific user type for each page where the title bar is used. Ex: <Header title="Healthcare Professional"/> */}
         <Link href="/login">
-          <Button variant="outline">{title == "" ? "Login" : "Logout"}</Button>
+          <LoginButton />
         </Link>
       </div>
     </div>

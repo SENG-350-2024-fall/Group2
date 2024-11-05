@@ -1,8 +1,9 @@
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 // Your own logic for dealing with plaintext password strings; be careful!
-import { getUserFromDb, saltAndHashPassword } from "@/lib/utils"
+import { saltAndHashPassword } from "@/lib/utils"
 import { ZodError } from "zod"
+import { getUserFromDb } from "./lib/actions"
 import { credentialsSchema } from "./lib/zod"
  
 export const { handlers, signIn, signOut, auth } = NextAuth({

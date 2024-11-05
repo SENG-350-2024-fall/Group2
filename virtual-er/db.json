@@ -78,5 +78,42 @@
       "severityRank": 4,
       "id": "7d28"
     }
+  ],
+  "credentials": [
+    {
+      "id": "1",
+      "email": "admin@mail.com",
+      "pwHash": "adminadmin",
+      "name": "Admin",
+      "role": "admin"
+    },
+    {
+      "id": "2",
+      "email": "patient@mail.com",
+      "pwHash": "patientpatient",
+      "name": "Patient",
+      "role": "patient"
+    },
+    {
+      "id": "3",
+      "email": "doctor@mail.com",
+      "pwHash": "doctordoctor",
+      "name": "Doctor",
+      "role": "doctor"
+    },
+    {
+      "id": "4",
+      "email": "nurse@mail.com",
+      "pwHash": "nursenurse",
+      "name": "Nurse",
+      "role": "nurse"
+    },
+    {
+      "id": "5",
+      "email": "receptionist@mail.com",
+      "pwHash": "receptionist",
+      "name": "Receptionist",
+      "role": "receptionist"
+    }
   ]
 }
