@@ -1,16 +1,16 @@
 "use client";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-  DialogClose
-} from "@/components/ui/dialog"
+  DialogTrigger
+} from "@/components/ui/dialog";
 
 import {
   Form,
@@ -20,15 +20,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
-import type { User, ER } from "../../../interfaces";
- 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
- 
+import type { ER, User } from "../../../../interfaces";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
 const formSchema = z.object({
   name: z.string().min(2, {
     message: "Username must be at least 2 characters.",
@@ -41,7 +41,7 @@ interface HeaderProps {
 }
 
 
-export function AdminDialog({ add }: HeaderProps) {
+export default function AdminDialog({ add }: HeaderProps) {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -50,7 +50,7 @@ export function AdminDialog({ add }: HeaderProps) {
       capacity: undefined
     },
   })
- 
+
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
@@ -67,8 +67,8 @@ export function AdminDialog({ add }: HeaderProps) {
       name: values.name,
     };
 
-    const PostObject = add == "ER" ? ERobject: UserObject;
-    
+    const PostObject = add == "ER" ? ERobject : UserObject;
+
     fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/${add}`, {
       method: 'POST',
       headers: {
@@ -99,7 +99,7 @@ export function AdminDialog({ add }: HeaderProps) {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{add == "ER" ? "ER Name": "Username"}</FormLabel>
+                  <FormLabel>{add == "ER" ? "ER Name" : "Username"}</FormLabel>
                   <FormControl>
                     <Input placeholder="" {...field} />
                   </FormControl>
@@ -111,33 +111,33 @@ export function AdminDialog({ add }: HeaderProps) {
               )}
             />
             {add == "ER"
-            ?
-            <FormField
-            control={form.control}
-            name="capacity"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Capacity</FormLabel>
-                <FormControl>
-                  <Input placeholder="" {...field} />
-                </FormControl>
-                <FormDescription>
-                  Capacity of ER.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}/>
-            : null}
+              ?
+              <FormField
+                control={form.control}
+                name="capacity"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Capacity</FormLabel>
+                    <FormControl>
+                      <Input placeholder="" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      Capacity of ER.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+              : null}
 
             <Button type="submit">Add New {add}</Button>
 
           </form>
         </Form>
 
-            <DialogFooter>
-              <DialogClose asChild>
-              </DialogClose>
-            </DialogFooter>
+        <DialogFooter>
+          <DialogClose asChild>
+          </DialogClose>
+        </DialogFooter>
 
 
       </DialogContent>
