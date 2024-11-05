@@ -1,5 +1,6 @@
 'use client'
 
+import { Button } from '@/components/ui/button';
 import {
     Form,
     FormControl,
@@ -9,13 +10,12 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { signInSchema } from "@/lib/zod";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from "next-auth/react";
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Button } from './button';
-import { RadioGroup, RadioGroupItem } from "./radio-group";
 
 export default function LoginForm() {
     const form = useForm<z.infer<typeof signInSchema>>({

@@ -1,9 +1,10 @@
-import { Button } from "@/components/ui/button";
+import { auth } from "@/auth";
 import Link from "next/link";
-import LoginButton from "./loginButton";
+import LoginButton from "./auth/loginButton";
+import LogoutButton from "./auth/logoutButton";
+import RoleMessage from "./roleMessage";
 
 interface HeaderProps {
-  title: string;
   ERName?: string;
 }
 
@@ -11,20 +12,20 @@ const interval = setInterval(() => {
   console.log("Online");
 }, 5000);
 
-export default async function Header({ title, ERName }: HeaderProps) {
+export default async function Header({ ERName }: HeaderProps) {
   if (typeof window !== "undefined") {
     window.addEventListener("beforeunload", () => clearInterval(interval));
   }
+
+  const session = await auth();
 
   return (
     <div className="flex items-center justify-between p-4 bg-gray-100">
       <h1 className="text-xl font-bold">VirtualER {ERName}</h1>
       <div className="flex items-center space-x-2">
-        <span className="text-sm text-gray-600">
-          {title !== "" ? `Signed in as ${title}` : ""}
-        </span> {/* With {title} we can display a specific user type for each page where the title bar is used. Ex: <Header title="Healthcare Professional"/> */}
+        <RoleMessage />
         <Link href="/login">
-          <LoginButton />
+          {session ? <LogoutButton /> : <LoginButton />}
         </Link>
       </div>
     </div>

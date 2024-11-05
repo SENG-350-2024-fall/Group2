@@ -1,10 +1,10 @@
-"use server"
-
+import { auth } from "@/auth";
 import { User } from "next-auth";
+import { redirect, RedirectType } from "next/navigation";
 import { UserData } from "./types";
 
 async function getUsers(): Promise<UserData[]> {
-    const response = await fetch(`${process.env.JSON_DB_URL}/users`, {
+    const response = await fetch(`${process.env.JSON_DB_URL}/credentials`, {
         method: "get",
         headers: {
             "Content-Type": "application/json"
@@ -42,4 +42,16 @@ export async function getRole(email: string) {
     }
 
     return ""
+}
+
+export async function checkRole(role: string) {
+    const session = await auth();
+    if (session?.user?.email) {
+        const userRole = await getRole(session.user.email);
+        if (userRole === role) {
+            return
+        }
+    }
+
+    redirect("/login", RedirectType.replace);
 }
