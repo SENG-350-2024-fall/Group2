@@ -105,7 +105,7 @@ export default function HCPDashboard({ role }: HCPDashboardProps) {
 
         const fetchData = async () => {
             try {
-                const PatientResult = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/patient`);
+                const PatientResult = await fetch('/api/patient');
                 let PatientList = await PatientResult.json();
                 setPatients(PatientList);
             } catch (error) {
@@ -125,7 +125,7 @@ export default function HCPDashboard({ role }: HCPDashboardProps) {
     const postData = async (updatedPatients: Patient[]) => {
 
         try {/*
-    const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/patient`, {
+    const response = await fetch('/api/patient', {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',

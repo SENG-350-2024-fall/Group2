@@ -17,7 +17,7 @@ export default function NearbyERs() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const result = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/ers`);
+                const result = await fetch('/api/ers');
                 let ERList = await result.json();
                 console.log(ERList);
                 setERs(ERList);
