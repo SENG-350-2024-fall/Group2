@@ -10,7 +10,7 @@ export default function AdminERs() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const ERResult = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/ers`);
+                const ERResult = await fetch('/api/ers');
                 let ERList = await ERResult.json()
                 setERs(ERList);
             } catch (error) {

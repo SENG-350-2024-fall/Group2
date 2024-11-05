@@ -10,7 +10,7 @@ export default function AdminUsers() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const userResult = await fetch('/api/users');
+                const userResult = await fetch('/api/admin/users');
                 let UserList = await userResult.json()
                 setUsers(UserList);
             } catch (error) {

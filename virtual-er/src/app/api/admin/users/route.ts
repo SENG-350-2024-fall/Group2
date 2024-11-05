@@ -1,6 +1,5 @@
 import { checkRole } from "@/lib/actions";
 import type { User } from "@/lib/interfaces";
-import type { NextApiRequest, NextApiResponse } from "next";
 
 async function getUsers(): Promise<User[]> {
     const response = await fetch(`${process.env.JSON_DB_URL}/users`, {

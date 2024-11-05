@@ -1,4 +1,5 @@
 import AdminDialog from "@/components/ui/admin/AdminDialog";
+import BackupRestore from "@/components/ui/admin/backupRestore";
 import AdminERs from "@/components/ui/admin/ers";
 import AdminUsers from "@/components/ui/admin/users";
 import Header from "@/components/ui/header";
@@ -28,6 +29,8 @@ export default async function Page() {
 
           <AdminDialog add="ER"></AdminDialog>
         </div>
+
+        <BackupRestore />
       </div>
     </div>
   )

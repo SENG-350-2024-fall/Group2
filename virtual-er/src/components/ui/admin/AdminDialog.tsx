@@ -67,7 +67,7 @@ export default function AdminDialog({ add }: HeaderProps) {
 
     const PostObject = add == "ER" ? ERobject : UserObject;
 
-    fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/${add}`, {
+    fetch(`/api/admin/${add}`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
