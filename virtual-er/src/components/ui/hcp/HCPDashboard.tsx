@@ -1,11 +1,7 @@
 "use client"; // Add this directive at the top of the file
 
-import Header from "@/components/ui/header";
-
+import type { Patient } from "@/lib/interfaces";
 import * as React from "react";
-
-import type { Patient } from "../../../../interfaces";
-
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";

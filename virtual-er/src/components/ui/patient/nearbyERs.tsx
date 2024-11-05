@@ -1,8 +1,8 @@
 'use client'
 
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { ER } from "@/lib/interfaces";
 import { useEffect, useState } from "react";
-import { ER } from "../../../../interfaces";
-import { Card, CardContent, CardHeader } from "../card";
 
 // Custom iterator generator function for ERs
 function* ERIterator(ERs: ER[]) {

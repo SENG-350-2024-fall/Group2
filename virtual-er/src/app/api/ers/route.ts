@@ -1,7 +1,6 @@
 import { checkRole } from "@/lib/actions";
+import type { ER } from "@/lib/interfaces";
 import type { NextApiRequest, NextApiResponse } from "next";
-import type { ER } from "../../../interfaces";
-
 
 async function getERs(): Promise<ER[]> {
     const response = await fetch(`${process.env.JSON_DB_URL}/ers`, {
@@ -19,21 +18,11 @@ async function getERs(): Promise<ER[]> {
     return await response.json() as ER[];
 }
 
-export default async function handler(
-  _req: NextApiRequest,
-  res: NextApiResponse<ER[]>,
-) {
-  if (!await checkRole("admin")) {
-    res.status(401);
-  }
-
+export async function GET() {
   try {
-    res.status(200).json(await getERs());
+    return new Response(JSON.stringify(await getERs()), { status: 200 });
   } catch(e) {
     console.error(e)
-    res.status(400)
-    return {
-        error: e
-    }
+    return new Response(null, { status: 400 });
   }
 }

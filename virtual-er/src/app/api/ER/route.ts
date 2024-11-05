@@ -1,6 +1,6 @@
 import { checkRole } from "@/lib/actions";
-import type { NextApiRequest, NextApiResponse } from "next";
-import type { ER } from "../../../interfaces";
+import type { ER } from "@/lib/interfaces";
+import { NextRequest } from "next/server";
 
 async function postER(PostObject: ER) {
     const response = await fetch(`${process.env.JSON_DB_URL}/ers`, {
@@ -17,22 +17,16 @@ async function postER(PostObject: ER) {
     }
 }
 
-export default async function handler(
-  _req: NextApiRequest,
-  res: NextApiResponse<ER>,
-) {
+export async function POST(request: NextRequest) {
   if (!await checkRole("admin")) {
-    res.status(401);
+    return new Response(null, { status: 401 });
   }
 
   try {
-    await postER(_req.body);
-    res.status(200);
+    await postER(await request.json());
+    return new Response(null, { status: 200 });
   } catch(e) {
     console.error(e)
-    res.status(400)
-    return {
-        error: e
-    }
+    return new Response(null, { status: 400 });
   }
 }

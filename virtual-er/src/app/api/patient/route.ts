@@ -1,7 +1,6 @@
 import { checkRoleList } from "@/lib/actions";
+import type { Patient } from "@/lib/interfaces";
 import type { NextApiRequest, NextApiResponse } from "next";
-import type { Patient } from "../../../interfaces";
-
 
 async function getPatients(): Promise<Patient[]> {
     const response = await fetch(`${process.env.JSON_DB_URL}/patients`, {
@@ -19,22 +18,15 @@ async function getPatients(): Promise<Patient[]> {
     return await response.json() as Patient[];
 }
 
-export default async function handler(
-  _req: NextApiRequest,
-  res: NextApiResponse<Patient[]>,
-) {
+export async function GET() {
   if (!await checkRoleList("doctor", "nurse", "receptionist")) {
-    res.status(401);
+    return new Response(null, { status: 401 });
   }
 
   try {
-    console.log(_req.body);
-    res.status(200).json(await getPatients());
+    return new Response(JSON.stringify(await getPatients()), { status: 200 });
   } catch(e) {
     console.error(e)
-    res.status(400)
-    return {
-        error: e
-    }
+    return new Response(null, { status: 400 });
   }
 }

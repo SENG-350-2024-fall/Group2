@@ -1,7 +1,7 @@
 'use client'
 
+import { User } from "@/lib/interfaces";
 import { useEffect, useState } from "react";
-import { User } from "../../../../interfaces";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../table";
 
 export default function AdminUsers() {
@@ -10,7 +10,7 @@ export default function AdminUsers() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const userResult = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/users`);
+                const userResult = await fetch('/api/users');
                 let UserList = await userResult.json()
                 setUsers(UserList);
             } catch (error) {

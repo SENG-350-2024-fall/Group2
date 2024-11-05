@@ -1,7 +1,7 @@
 'use client'
 
+import { ER } from "@/lib/interfaces";
 import { useEffect, useState } from "react";
-import { ER } from "../../../../interfaces";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../table";
 
 export default function AdminERs() {

@@ -1,7 +1,6 @@
 import { checkRole } from "@/lib/actions";
+import type { User } from "@/lib/interfaces";
 import type { NextApiRequest, NextApiResponse } from "next";
-import type { User } from "../../../interfaces";
-
 
 async function getUsers(): Promise<User[]> {
     const response = await fetch(`${process.env.JSON_DB_URL}/users`, {
@@ -18,21 +17,15 @@ async function getUsers(): Promise<User[]> {
     return await response.json() as User[];
 }
 
-export default async function handler(
-  _req: NextApiRequest,
-  res: NextApiResponse<User[]>,
-) {
+export async function GET() {
   if (!await checkRole("admin")) {
-    res.status(401);
+    return new Response(null, { status: 401 });
   }
   
   try {
-    res.status(200).json(await getUsers());
+    return new Response(JSON.stringify(await getUsers()), { status: 200 });
   } catch(e) {
     console.error(e)
-    res.status(400)
-    return {
-        error: e
-    }
+    return new Response(null, { status: 400 });
   }
 }
