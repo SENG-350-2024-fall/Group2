@@ -27,7 +27,7 @@ export default function NearbyERs() {
         };
 
         fetchData();
-    })
+    }, [])
 
     const erIterator = ERIterator(ERs);
 

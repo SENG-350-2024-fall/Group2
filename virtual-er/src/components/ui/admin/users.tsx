@@ -19,7 +19,7 @@ export default function AdminUsers() {
         };
 
         fetchData();
-    });
+    }, []);
 
     return (
         <Table>
