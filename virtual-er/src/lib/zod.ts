@@ -13,3 +13,12 @@ export const credentialsSchema = z.object({
   email: emailField,
   password: passwordField
 })
+
+export const questionnaireSchema = z.object({
+  name: z.string({ required_error: "Name is required" }),
+  dob: z.string({ required_error: "Date of birth is required" }).date("Invalid date of birth"),
+  phn: z.number({ required_error: "PHN is required" }),
+  email: z.string({ required_error: "Email is required" }).email("Invalid email"),
+  symptoms: z.string({ required_error: "Symptoms are required" }),
+  medicalHistory: z.string({ required_error: "Medical history is required" })
+})

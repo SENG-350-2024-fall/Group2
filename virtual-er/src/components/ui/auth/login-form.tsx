@@ -19,10 +19,6 @@ import { z } from 'zod';
 export default function LoginForm() {
     const form = useForm<z.infer<typeof credentialsSchema>>({
         resolver: zodResolver(credentialsSchema),
-        defaultValues: {
-            email: '',
-            password: '',
-        },
     })
 
     const emailField = <FormField
