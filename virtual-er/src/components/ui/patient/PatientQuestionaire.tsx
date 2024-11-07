@@ -11,7 +11,12 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Textarea } from "../textarea";
 
-export default function PatientQuestionnaire() {
+interface PatientQuestionnaireProps {
+  email?: string;
+  name?: string;
+}
+
+export default function PatientQuestionnaire({ email, name }: PatientQuestionnaireProps) {
   const [submitted, setSubmitted] = React.useState(false);
 
   const form = useForm<z.infer<typeof questionnaireSchema>>({
@@ -27,6 +32,7 @@ export default function PatientQuestionnaire() {
         <FormControl>
           <Input
             type="text"
+            defaultValue={name}
             required
             {...field}
           />
@@ -83,6 +89,7 @@ export default function PatientQuestionnaire() {
         <FormControl>
           <Input
             type="email"
+            defaultValue={email}
             placeholder="mail@example.com"
             required
             {...field}
