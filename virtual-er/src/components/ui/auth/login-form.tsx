@@ -13,10 +13,22 @@ import { Input } from "@/components/ui/input";
 import { submitLoginForm } from '@/lib/server-actions';
 import { credentialsSchema } from "@/lib/zod";
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 export default function LoginForm() {
+    const [loginError, setLoginError] = useState<string | null>(null)
+
+    function handleSubmit(data: z.infer<typeof credentialsSchema>) {
+        submitLoginForm(data)
+            .then(result => {
+                if (result.error) {
+                    setLoginError(result.error)
+                }
+            })
+    }
+
     const form = useForm<z.infer<typeof credentialsSchema>>({
         resolver: zodResolver(credentialsSchema),
     })
@@ -61,10 +73,11 @@ export default function LoginForm() {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(submitLoginForm)} className="m-auto space-y-3">
+            <form onSubmit={form.handleSubmit(handleSubmit)} className="m-auto space-y-3">
                 {emailField}
                 {passwordField}
                 <Button type="submit">Login</Button>
+                {loginError && <p className="text-red-500">{loginError}</p>}
             </form>
         </Form>
     )

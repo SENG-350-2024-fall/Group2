@@ -3,13 +3,18 @@
 import { signIn } from "@/auth";
 import { ER } from "@/lib//interfaces";
 import { getRoleFromEmail } from "@/lib/actions";
-import { credentialsSchema, erRequestSchema } from "@/lib/zod";
+import { credentialsSchema } from "@/lib/zod";
+import { error } from "console";
 import { z } from "zod";
 
 export async function submitLoginForm(data: z.infer<typeof credentialsSchema>) {
     const { email, password } = data;
 
     const role = await getRoleFromEmail(email);
+
+    if (role === "") {
+        return {error: "Invalid email"};
+    }
     
     const pages: { [index: string]: string} = {
         admin: "/admin",
@@ -18,8 +23,13 @@ export async function submitLoginForm(data: z.infer<typeof credentialsSchema>) {
         doctor: "/healthcareprofessional",
         receptionist: "/healthcareprofessional",
     }
-
-    await signIn("credentials", {email, password, redirectTo: pages[role] || "/"});
+    
+    try {
+        await signIn("credentials", {email, password, redirectTo: pages[role] || "/"});
+        return {success: true};
+    } catch (error) {
+        return {error: "Invalid password"};
+    }
 }
 
 export async function getERByID(id: number): Promise<ER | null> {
