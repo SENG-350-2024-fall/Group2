@@ -10,6 +10,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import type { Patient } from "@/lib/interfaces";
+import { SOI } from "@/lib/zod";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import io, { Socket } from "socket.io-client";
@@ -60,12 +61,7 @@ const initialPatients: Patient[] = [
     //   RoomNumber: 122,
     // },
 ];
-enum SeverityOfIllness {
-    Extreme = "Extreme",
-    Major = "Major",
-    Moderate = "Moderate",
-    Minor = "Minor",
-}
+
 const severityRank = {
     Extreme: 1,
     Major: 2,
@@ -188,7 +184,7 @@ export default function HCPDashboard({ role }: HCPDashboardProps) {
         RelevantInformation: newPatient.RelevantInformation,
         PositionInQueue: patients.length.toString(),
         RoomNumber: parseInt(newPatient.RoomNumber, 10), // Ensure RoomNumber is a number,
-        severityRank: severityRank[newPatient.SeverityOfIllness as keyof typeof SeverityOfIllness]
+        severityRank: severityRank[newPatient.SeverityOfIllness as keyof typeof SOI.Enum]
     };
     /*
     This function becomes more complicated as a result of updating the indexes correctly.

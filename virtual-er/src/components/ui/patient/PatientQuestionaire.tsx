@@ -4,11 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { questionnaireSchema } from "@/lib/zod";
+import { useERs } from "@/lib/data";
+import { erRequestSchema } from "@/lib/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { RadioGroup, RadioGroupItem } from "../radio-group";
+import { ScrollArea } from "../scroll-area";
 import { Textarea } from "../textarea";
 
 interface PatientQuestionnaireProps {
@@ -18,9 +21,21 @@ interface PatientQuestionnaireProps {
 
 export default function PatientQuestionnaire({ email, name }: PatientQuestionnaireProps) {
   const [submitted, setSubmitted] = React.useState(false);
+  const { ers, isLoading } = useERs();
 
-  const form = useForm<z.infer<typeof questionnaireSchema>>({
-    resolver: zodResolver(questionnaireSchema),
+  const form = useForm<z.infer<typeof erRequestSchema>>({
+    resolver: zodResolver(erRequestSchema),
+    defaultValues: {
+      name: name ?? "",
+      email: email ?? "",
+      dob: "",
+      // we set the phn to an empty string so the input field is empty
+      // @ts-expect-error
+      phn: "",
+      symptoms: "",
+      medicalHistory: "",
+      erID: -1
+    }
   });
 
   const nameField = <FormField
@@ -32,7 +47,6 @@ export default function PatientQuestionnaire({ email, name }: PatientQuestionnai
         <FormControl>
           <Input
             type="text"
-            defaultValue={name}
             required
             {...field}
           />
@@ -89,7 +103,6 @@ export default function PatientQuestionnaire({ email, name }: PatientQuestionnai
         <FormControl>
           <Input
             type="email"
-            defaultValue={email}
             placeholder="mail@example.com"
             required
             {...field}
@@ -117,6 +130,33 @@ export default function PatientQuestionnaire({ email, name }: PatientQuestionnai
     )}
   />
 
+  const erField = <FormField
+    control={form.control}
+    name="erID"
+    render={({ field }) => (
+      <FormItem className="space-y-3">
+        <FormLabel>Select an ER</FormLabel>
+        <FormControl>
+          <RadioGroup
+            onValueChange={field.onChange}
+            defaultValue={String(field.value)}>
+            {ers.map((er) => (
+              <FormItem key={er.id} className="space-x-2">
+                <FormControl>
+                  <RadioGroupItem value={String(er.id)} />
+                </FormControl>
+                <FormLabel>
+                  {er.name} - Wait time: {er.waitTime ?? 0} hours
+                </FormLabel>
+              </FormItem>
+            ))}
+          </RadioGroup>
+        </FormControl>
+        <FormMessage />
+      </FormItem>
+    )}
+  />
+
   const historyField = <FormField
     control={form.control}
     name='medicalHistory'
@@ -134,9 +174,10 @@ export default function PatientQuestionnaire({ email, name }: PatientQuestionnai
     )}
   />
 
-  const handleSubmit = () => {
+  const handleSubmit = (data: z.infer<typeof erRequestSchema>) => {
     // Process or save the questionnaire data here
     setSubmitted(true);
+    console.log(data);
   };
 
   return (
@@ -150,19 +191,22 @@ export default function PatientQuestionnaire({ email, name }: PatientQuestionnai
           <DialogDescription>Please provide details about your medical condition.</DialogDescription>
         </DialogHeader>
 
-        <Form {...form}>
+        <ScrollArea className="h-96">
+          <Form {...form}>
 
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4 overflow-auto">
-            {nameField}
-            {dobField}
-            {phnField}
-            {emailField}
-            {symptomsField}
-            {historyField}
-            <Button className="mt-6" type="submit">Submit</Button>
-            {submitted && <p className="mt-2 text-green-500">Thank you! Your response has been recorded.</p>}
-          </form>
-        </Form>
+            <form className="space-y-4 overflow-auto">
+              {nameField}
+              {dobField}
+              {phnField}
+              {emailField}
+              {isLoading ? <div>Loading ERs...</div> : erField}
+              {symptomsField}
+              {historyField}
+            </form>
+          </Form>
+        </ScrollArea>
+        {submitted && <p className=" text-green-500">Thank you! Your response has been recorded.</p>}
+        <Button className="mt-2" type="submit" onClick={form.handleSubmit(handleSubmit)}>Submit</Button>
       </DialogContent>
     </Dialog>
   );

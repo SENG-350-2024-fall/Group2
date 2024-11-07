@@ -1,7 +1,5 @@
 import { clsx, type ClassValue } from "clsx"
-import { User } from "next-auth"
 import { twMerge } from "tailwind-merge"
-import { UserData } from "./types"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
