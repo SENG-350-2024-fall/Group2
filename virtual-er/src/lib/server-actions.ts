@@ -3,8 +3,8 @@
 import { signIn } from "@/auth";
 import { ER } from "@/lib//interfaces";
 import { getRoleFromEmail } from "@/lib/actions";
-import { credentialsSchema } from "@/lib/zod";
-import { error } from "console";
+import { credentialsSchema, erRequestSchema } from "@/lib/zod";
+import { redirect } from "next/navigation";
 import { z } from "zod";
 
 export async function submitLoginForm(data: z.infer<typeof credentialsSchema>) {
@@ -25,11 +25,12 @@ export async function submitLoginForm(data: z.infer<typeof credentialsSchema>) {
     }
     
     try {
-        await signIn("credentials", {email, password, redirectTo: pages[role] || "/"});
-        return {success: true};
+        await signIn("credentials", {email, password, redirect: false});
     } catch (error) {
         return {error: "Invalid password"};
     }
+
+    redirect(pages[role] || "/");
 }
 
 export async function getERByID(id: number): Promise<ER | null> {

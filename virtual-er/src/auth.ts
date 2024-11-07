@@ -2,7 +2,6 @@ import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 // Your own logic for dealing with plaintext password strings; be careful!
 import { saltAndHashPassword } from "@/lib/utils"
-import { redirect, RedirectType } from "next/navigation"
 import { ZodError } from "zod"
 import { getUserFromDb } from "./lib/actions"
 import { credentialsSchema } from "./lib/zod"

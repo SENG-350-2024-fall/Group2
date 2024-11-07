@@ -23,7 +23,7 @@ export default function LoginForm() {
     function handleSubmit(data: z.infer<typeof credentialsSchema>) {
         submitLoginForm(data)
             .then(result => {
-                if (result.error) {
+                if (result?.error) {
                     setLoginError(result.error)
                 }
             })
@@ -31,6 +31,10 @@ export default function LoginForm() {
 
     const form = useForm<z.infer<typeof credentialsSchema>>({
         resolver: zodResolver(credentialsSchema),
+        defaultValues: {
+            email: '',
+            password: ''
+        }
     })
 
     const emailField = <FormField
