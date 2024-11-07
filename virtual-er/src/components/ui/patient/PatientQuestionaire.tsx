@@ -18,9 +18,10 @@ import { Textarea } from "../textarea";
 interface PatientQuestionnaireProps {
   email?: string;
   name?: string;
+  er?: string;
 }
 
-export default function PatientQuestionnaire({ email, name }: PatientQuestionnaireProps) {
+export default function PatientQuestionnaire({ email, name, er }: PatientQuestionnaireProps) {
   const [submitted, setSubmitted] = React.useState(false);
   const { ers, isLoading } = useERs();
 
@@ -35,7 +36,7 @@ export default function PatientQuestionnaire({ email, name }: PatientQuestionnai
       phn: "",
       symptoms: "",
       medicalHistory: "",
-      erID: -1
+      erID: er ?? "",
     }
   });
 
@@ -140,11 +141,11 @@ export default function PatientQuestionnaire({ email, name }: PatientQuestionnai
         <FormControl>
           <RadioGroup
             onValueChange={field.onChange}
-            defaultValue={String(field.value)}>
+            defaultValue={field.value}>
             {ers.map((er) => (
               <FormItem key={er.id} className="space-x-2">
                 <FormControl>
-                  <RadioGroupItem value={String(er.id)} />
+                  <RadioGroupItem value={er.id} />
                 </FormControl>
                 <FormLabel>
                   {er.name} - Wait time: {er.waitTime ?? 0} hours
@@ -176,6 +177,10 @@ export default function PatientQuestionnaire({ email, name }: PatientQuestionnai
   />
 
   const handleSubmit = async (data: z.infer<typeof erRequestSchema>) => {
+    if (er !== undefined) {
+      data.erID = er;
+    }
+
     // Process or save the questionnaire data here
     setSubmitted(true);
     console.log(data);
@@ -202,7 +207,7 @@ export default function PatientQuestionnaire({ email, name }: PatientQuestionnai
               {dobField}
               {phnField}
               {emailField}
-              {isLoading ? <div>Loading ERs...</div> : erField}
+              {er === undefined && isLoading ? <div>Loading ERs...</div> : erField}
               {symptomsField}
               {historyField}
             </form>

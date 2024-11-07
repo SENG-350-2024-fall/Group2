@@ -45,19 +45,8 @@ export const erRequestSchema = z.object({
     medicalHistory: z.string({ required_error: "Medical history is required" })
         .min(1, "Medical history is required"),
     erID: z.string({ required_error: "ER ID is required" })
-        .transform(async (erID, ctx) => {
-            const erIDNum = Number(erID)
-            if (isNaN(erIDNum)) {
-                ctx.addIssue({
-                    code: z.ZodIssueCode.invalid_type,
-                    expected: "number",
-                    received: "string",
-                    message: "PHN must be a number"
-                })
-                return erIDNum
-            }
-
-            const ER = await getERByID(erIDNum)
+        .superRefine(async (erID, ctx) => {
+            const ER = await getERByID(erID)
 
             if (ER === null) {
                 ctx.addIssue({
@@ -65,8 +54,7 @@ export const erRequestSchema = z.object({
                     message: "ER ID does not exist"
                 })
             }
-
-            return erIDNum
         }),
-    soi: SOI.optional()
+    soi: SOI.optional(),
+    date: z.number().optional(),
 })

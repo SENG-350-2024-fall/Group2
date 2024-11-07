@@ -1,19 +1,14 @@
 "use client"; // Add this directive at the top of the file
 
 import { Button } from "@/components/ui/button";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
+import CurrentPatientDialog from "@/components/ui/hcp/currentPatientDialog";
+import { usePatients } from "@/lib/data";
 import type { Patient } from "@/lib/interfaces";
 import { SOI } from "@/lib/zod";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import io, { Socket } from "socket.io-client";
+import PatientQueue from "./patientQueue";
 
 let socket: Socket;
 
@@ -74,6 +69,8 @@ interface HCPDashboardProps {
 }
 
 export default function HCPDashboard({ role }: HCPDashboardProps) {
+    const { patients, mutate } = usePatients();
+
     useEffect(() => {
         const socketInitializer = async () => {
             await fetch('/api/socket');
@@ -83,84 +80,46 @@ export default function HCPDashboard({ role }: HCPDashboardProps) {
                 console.log('connected')
             })
 
-            socket.on('update-patients', updatePatients => {
-                setPostingData(true);
-                setPostingData(false); // trigger a re-fetch
+            socket.on('add-patient', newPatient => {
+                mutate(patients.concat(newPatient));
+            })
+
+            socket.on('remove-patient', id => {
+                mutate(patients.filter(patient => patient.id !== id));
             })
         }
 
         socketInitializer()
     }, []);
 
-    const [patients, setPatients] = React.useState<Patient[]>([]);
-    const [postingData, setPostingData] = useState(false); // is there currently a post request
+    async function postPatient(newPatient: Patient) {
+        try {
+            const response = await fetch('/api/patient', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newPatient), // Convert to JSON string
+            });
 
-    // add useEffect for checking user type
-    useEffect(() => {
-        if (postingData) return; // Avoid fetching while posting data
-
-        const fetchData = async () => {
-            try {
-                const PatientResult = await fetch('/api/patient');
-                let PatientList = await PatientResult.json();
-                setPatients(PatientList);
-            } catch (error) {
-                console.error('Error fetching data:', error);
+            if (!response.ok) {
+                throw new Error('Failed to update patients');
             }
-        };
 
-        fetchData();
-    }, [postingData]); // Only re-run this if `postingData` changes
-
-    const currentPatient = patients[0] || null;
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    // Toggle modal visibility
-    const toggleModal = () => setIsModalOpen(!isModalOpen); // toggle visible
-
-    const postData = async (updatedPatients: Patient[]) => {
-
-        try {/*
-    const response = await fetch('/api/patient', {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedPatients), // Convert to JSON string
-    });
-      
-    if (!response.ok) {
-        throw new Error('Failed to update patients');
-    }
-      */
-            setPostingData(false); // Reset postingData after successful post
-            socket.emit('patient-change', updatedPatients);
+            socket.emit('emit-add-patient', newPatient);
+            await mutate(patients.concat(newPatient));
         } catch (error) {
             console.error('Error posting data:', error);
-            setPostingData(false); // Reset on error too
         }
-
     }
-    const addPatient = (newPatient: Patient) => {
-        setPatients((prevPatients) => {
-            const updatedPatients = [...prevPatients, newPatient].sort((a, b) =>
-                a.severityRank - b.severityRank
-            ).map((patient, index) => ({
-                ...patient,
-                PositionInQueue: index === 0 ? "0 (Current Patient)" : index.toString(),
-            }));
 
-            setPostingData(true);
-            postData(updatedPatients);
-            return updatedPatients;
-        });
-    };
     const [newPatient, setNewPatient] = useState({
         PatientName: "",
         SeverityOfIllness: "Minor",
         RelevantInformation: "",
         RoomNumber: ""
     });
+
     const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setNewPatient((prev) => ({
@@ -168,141 +127,72 @@ export default function HCPDashboard({ role }: HCPDashboardProps) {
             [name]: value,
         }));
     };
+
     const handleFormSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        addPatient(newPatientData);
-        setNewPatient({
+        postPatient(newPatientData()).then(() => setNewPatient({
             PatientName: "",
             SeverityOfIllness: "Minor",
             RelevantInformation: "",
             RoomNumber: ""
-        });
+        }))
     };
-    const newPatientData: Patient = {
-        PatientName: newPatient.PatientName,
-        SeverityOfIllness: newPatient.SeverityOfIllness,
-        RelevantInformation: newPatient.RelevantInformation,
-        PositionInQueue: patients.length.toString(),
-        RoomNumber: parseInt(newPatient.RoomNumber, 10), // Ensure RoomNumber is a number,
-        severityRank: severityRank[newPatient.SeverityOfIllness as keyof typeof SOI.Enum]
-    };
-    /*
-    This function becomes more complicated as a result of updating the indexes correctly.
-    It removes the patient that had their remove button clicked.
-    */
-    const removePatient = (index: number) => {
-        setPostingData(true);
 
-        setPatients((prevPatients) => {
-            const updatedPatients = prevPatients.filter((_, i) => i !== index).map((patient, newIndex) => ({
-                ...patient,
-                PositionInQueue: newIndex.toString(),
-            }));
-            // Update the current patient position if there's any remaining
-            if (updatedPatients.length > 0) {
-                updatedPatients[0].PositionInQueue = "0 (Current Patient)";
-            }
-            setPostingData(true);
-            postData(updatedPatients);
-            return updatedPatients;
-        });
+    function newPatientData(): Patient {
+        return {
+            PatientName: newPatient.PatientName,
+            SeverityOfIllness: newPatient.SeverityOfIllness,
+            RelevantInformation: newPatient.RelevantInformation,
+            RoomNumber: parseInt(newPatient.RoomNumber, 10), // Ensure RoomNumber is a number,
+            severityRank: severityRank[newPatient.SeverityOfIllness as keyof typeof SOI.Enum]
+        }
     };
 
     return (
         <div>
-            <div className="mt-10"> {/* 10px margin top for the table */}
-                <div className="w-2/3 pl-10"> {/* Set width to 2/3 and left padding to 10px */}
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Patient Name</TableHead>
-                                <TableHead>Severity of Illness</TableHead>
-                                <TableHead>Relevant Information</TableHead>
-                                <TableHead>Position in Queue</TableHead>
-                                <TableHead>Room Number</TableHead>
-                                <TableHead>Remove Patient</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {patients.map((patient, index) => (
-                                <TableRow key={index}>
-                                    <TableCell className="font-medium">{patient.PatientName}</TableCell>
-                                    <TableCell>{patient.SeverityOfIllness}</TableCell>
-                                    <TableCell>{patient.RelevantInformation}</TableCell>
-                                    <TableCell>{patient.PositionInQueue}</TableCell>
-                                    <TableCell>{patient.RoomNumber}</TableCell>
-                                    <TableCell><Button onClick={() => removePatient(index)}>
-                                        Remove
-                                    </Button></TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </div>
-            </div>
-            <Button
-                className="fixed bottom-4 right-4" // Positioning the button at the bottom right
-                onClick={toggleModal}
-            >
-                View Current Patient Information
-            </Button>
-            {isModalOpen && currentPatient && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white p-6 rounded shadow-lg max-w-lg w-full">
-                        <h2 className="text-xl font-semibold mb-4">Current Patient Information</h2>
-                        <p><strong>Name:</strong> {currentPatient.PatientName}</p>
-                        <p><strong>Severity of Illness:</strong> {currentPatient.SeverityOfIllness}</p>
-                        <p><strong>Relevant Information:</strong> {currentPatient.RelevantInformation}</p>
-                        <p><strong>Room Number:</strong> {currentPatient.RoomNumber}</p>
-                        <Button onClick={toggleModal} className="mt-4">
-                            Close
-                        </Button>
-                    </div>
-                </div>
-            )}
+            <PatientQueue />
+            <CurrentPatientDialog />
             {role === 'receptionist' && (
-                <form onSubmit={handleFormSubmit} className="p-4 mt-4 border rounded shadow-md">
+                <div className="p-4 m-4 w-2/3 border rounded shadow-md">
                     <h2>Add New Patient</h2>
-                    <input
-                        type="text"
-                        name="PatientName"
-                        value={newPatient.PatientName}
-                        onChange={handleFormChange}
-                        placeholder="Patient Name"
-                        required
-                        className="mt-2"
-                    />
-                    <select
-                        name="SeverityOfIllness"
-                        value={newPatient.SeverityOfIllness}
-                        onChange={handleFormChange}
-                        className="mt-2"
-                    >
-                        <option value="Extreme">Extreme</option>
-                        <option value="Major">Major</option>
-                        <option value="Moderate">Moderate</option>
-                        <option value="Minor">Minor</option>
-                    </select>
-                    <input
-                        type="text"
-                        name="RelevantInformation"
-                        value={newPatient.RelevantInformation}
-                        onChange={handleFormChange}
-                        placeholder="Relevant Information"
-                        required
-                        className="mt-2"
-                    />
-                    <input
-                        type="number"
-                        name="RoomNumber"
-                        value={newPatient.RoomNumber}
-                        onChange={handleFormChange}
-                        placeholder="Room Number"
-                        required
-                        className="mt-2"
-                    />
-                    <Button type="submit" className="mt-4">Add Patient</Button>
-                </form>
+                    <form onSubmit={handleFormSubmit} className="mt-2 space-y-2">
+                        <input
+                            type="text"
+                            name="PatientName"
+                            value={newPatient.PatientName}
+                            onChange={handleFormChange}
+                            placeholder="Patient Name"
+                            required
+                        />
+                        <select
+                            name="SeverityOfIllness"
+                            value={newPatient.SeverityOfIllness}
+                            onChange={handleFormChange}
+                        >
+                            <option value="Extreme">Extreme</option>
+                            <option value="Major">Major</option>
+                            <option value="Moderate">Moderate</option>
+                            <option value="Minor">Minor</option>
+                        </select>
+                        <input
+                            type="text"
+                            name="RelevantInformation"
+                            value={newPatient.RelevantInformation}
+                            onChange={handleFormChange}
+                            placeholder="Relevant Information"
+                            required
+                        />
+                        <input
+                            type="number"
+                            name="RoomNumber"
+                            value={newPatient.RoomNumber}
+                            onChange={handleFormChange}
+                            placeholder="Room Number"
+                            required
+                        />
+                        <Button type="submit">Add Patient</Button>
+                    </form>
+                </div>
             )}
         </div>
     );

@@ -33,7 +33,7 @@ export async function submitLoginForm(data: z.infer<typeof credentialsSchema>) {
     redirect(pages[role] || "/");
 }
 
-export async function getERByID(id: number): Promise<ER | null> {
+export async function getERByID(id: string): Promise<ER | null> {
     const response = await fetch(`${process.env.JSON_DB_URL}/ers/${id}`, {
         method: "get",
         headers: {
@@ -57,7 +57,7 @@ export async function submitQuestionnaire(data: z.infer<typeof erRequestSchema>)
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify({...data, requestDate: Date.now()})
     });
 
     if (!response.ok) {
