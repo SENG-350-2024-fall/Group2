@@ -50,3 +50,21 @@ export async function getERByID(id: number): Promise<ER | null> {
 
     return ER;
 }
+
+export async function submitQuestionnaire(data: z.infer<typeof erRequestSchema>) {
+
+
+    const response = await fetch(`${process.env.JSON_DB_URL}/er_requests`, {
+        method: "post",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    });
+
+    if (!response.ok) {
+        return {error: "Failed to submit questionnaire"};
+    }
+
+    return {success: true};
+}

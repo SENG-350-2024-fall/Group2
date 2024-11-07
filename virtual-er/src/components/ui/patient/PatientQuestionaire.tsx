@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useERs } from "@/lib/data";
+import { submitQuestionnaire } from "@/lib/server-actions";
 import { erRequestSchema } from "@/lib/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as React from "react";
@@ -174,10 +175,12 @@ export default function PatientQuestionnaire({ email, name }: PatientQuestionnai
     )}
   />
 
-  const handleSubmit = (data: z.infer<typeof erRequestSchema>) => {
+  const handleSubmit = async (data: z.infer<typeof erRequestSchema>) => {
     // Process or save the questionnaire data here
     setSubmitted(true);
     console.log(data);
+    const result = await submitQuestionnaire(data);
+    console.log(result);
   };
 
   return (
