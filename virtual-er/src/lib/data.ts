@@ -1,4 +1,4 @@
-import { ER } from '@/lib/interfaces'
+import { ER, Patient } from '@/lib/interfaces'
 import useSWR from 'swr'
 
 export function fetcher(...args: Parameters<typeof fetch>) {
@@ -12,5 +12,16 @@ export function useERs() {
         ers: data as ER[],
         isLoading,
         isError: error
+    }
+}
+
+export function usePatients() {
+    const { data, error, isLoading, mutate } = useSWR('/api/patient', fetcher)
+
+    return {
+        patients: data as Patient[],
+        isLoading,
+        isError: error,
+        mutate
     }
 }
