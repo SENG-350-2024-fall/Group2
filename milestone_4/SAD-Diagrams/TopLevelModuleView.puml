@@ -1,0 +1,47 @@
+@startuml
+
+package "Authentication Module" {
+  [Login Page] 
+  [Auth Logic] 
+}
+
+package "Admin Module" {
+  [Admin Dashboard]
+  [Manage Users]
+}
+
+package "Healthcare Professional Module" {
+  [Healthcare Professional Dashboard]
+}
+
+package "Patient Module" {
+  [Patient Dashboard]
+  [Nearby ERs]
+}
+
+package "UI Components" {
+  [Header]
+  [Buttons]
+}
+
+package "API Module" {
+  [User API]
+  [ER API]
+}
+
+package "Global Resources" {
+  [Global Styles]
+}
+
+' Defining interactions
+[Login Page] --> [Auth Logic]
+[Admin Dashboard] --> [Manage Users]
+[Healthcare Professional Dashboard] --> [Patient Dashboard]
+[Patient Dashboard] --> [Nearby ERs]
+
+[User API] --> [Auth Logic]
+[ER API] --> [Manage Users]
+
+[Header] --> [Buttons]
+
+@enduml
