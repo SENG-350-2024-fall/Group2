@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
+import { UserData } from "@/lib/types";
 import { redirect, RedirectType } from "next/navigation";
-import { UserData } from "./types";
 
 async function getUser(email: string): Promise<UserData | null> {
     const response = await fetch(`${process.env.JSON_DB_URL}/credentials?email=${email}`, {

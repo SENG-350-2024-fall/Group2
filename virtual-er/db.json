@@ -120,5 +120,17 @@
       "name": "Receptionist",
       "role": "receptionist"
     }
+  ],
+  "er_requests": [
+    {
+      "id": "96cd",
+      "name": "Patient",
+      "dob": "2024-11-06",
+      "phn": 1234123123,
+      "email": "patient@mail.com",
+      "symptoms": "sad",
+      "medicalHistory": "happy",
+      "erID": 1
+    }
   ]
 }

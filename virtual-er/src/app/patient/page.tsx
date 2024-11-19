@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import Header from "@/components/ui/header";
 import AppointmentManager from "@/components/ui/patient/appointmentManager";
 import NearbyERs from "@/components/ui/patient/nearbyERs";
@@ -6,6 +7,9 @@ import { protectPageForRole } from "@/lib/actions";
 
 export default async function PatientPage() {
   await protectPageForRole("patient");
+  const session = await auth();
+  if (!session || !session.user) return null;
+  const { name, email } = session.user;
 
   return (
     <div className="relative min-h-screen">
@@ -20,7 +24,7 @@ export default async function PatientPage() {
         {/* Medical Questionnaire */}
         <div className="mt-10">
           <h2 className="text-xl font-bold">Patient Questionnaire</h2>
-          <PatientQuestionnaire />
+          <PatientQuestionnaire name={name!} email={email!} />
         </div>
 
         {/* Schedule an Appointment */}

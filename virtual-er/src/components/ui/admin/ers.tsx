@@ -1,25 +1,15 @@
 'use client'
 
+import { useERs } from "@/lib/data";
 import { ER } from "@/lib/interfaces";
-import { useEffect, useState } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../table";
 
 export default function AdminERs() {
-    const [ERs, setERs] = useState<ER[]>([]);
+    const { ers: ERs, isLoading } = useERs();
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const ERResult = await fetch('/api/ers');
-                let ERList = await ERResult.json()
-                setERs(ERList);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-
-        fetchData();
-    }, []);
+    if (isLoading) {
+        return <div>Loading ERs...</div>;
+    }
 
     return (
         <Table>
@@ -32,7 +22,7 @@ export default function AdminERs() {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {ERs.map((emergencyRoom: ER) => (
+                {ERs.map((emergencyRoom) => (
                     <TableRow key={emergencyRoom.id}>
                         <TableCell className="font-medium">{emergencyRoom.id}</TableCell>
                         <TableCell>{emergencyRoom.name}</TableCell>

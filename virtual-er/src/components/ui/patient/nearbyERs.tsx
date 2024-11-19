@@ -1,6 +1,7 @@
 'use client'
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { useERs } from "@/lib/data";
 import { ER } from "@/lib/interfaces";
 import { useEffect, useState } from "react";
 
@@ -12,28 +13,13 @@ function* ERIterator(ERs: ER[]) {
 }
 
 export default function NearbyERs() {
-    const [ERs, setERs] = useState<ER[]>([]);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const result = await fetch('/api/ers');
-                let ERList = await result.json();
-                console.log(ERList);
-                setERs(ERList);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        };
-
-        fetchData();
-    }, [])
+    const { ers: ERs, isLoading } = useERs();
 
     const erIterator = ERIterator(ERs);
 
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-5"> {/* Responsive grid */}
-            {Array.from(erIterator).map((er, index) => (
+            {isLoading ? <span>Loading ERs...</span> : Array.from(erIterator).map((er, index) => (
                 <Card key={index}>
                     <CardHeader>
                         <h3>{er.name}</h3>
