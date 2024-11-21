@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useERs } from "@/lib/data";
-import { ER } from "@/lib/interfaces";
+import type { ER } from "@/lib/interfaces";
 import { useEffect, useState } from "react";
 
 // Custom iterator generator function for ERs

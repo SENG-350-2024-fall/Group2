@@ -1,8 +1,8 @@
 import { auth } from "@/auth";
+import LoginButton from "@/components/auth/loginButton";
+import LogoutButton from "@/components/auth/logoutButton";
+import RoleMessage from "@/components/auth/roleMessage";
 import Link from "next/link";
-import LoginButton from "./auth/loginButton";
-import LogoutButton from "./auth/logoutButton";
-import RoleMessage from "./auth/roleMessage";
 
 interface HeaderProps {
   ERName?: string;
