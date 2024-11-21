@@ -4,29 +4,29 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Textarea } from "@/components/ui/textarea";
 import { useERs } from "@/lib/data";
 import { submitQuestionnaire } from "@/lib/server-actions";
-import { erRequestSchema } from "@/lib/zod";
+import { erRequestFormSchema } from "@/lib/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as React from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { RadioGroup, RadioGroupItem } from "../radio-group";
-import { ScrollArea } from "../scroll-area";
-import { Textarea } from "../textarea";
 
 interface PatientQuestionnaireProps {
   email?: string;
   name?: string;
-  er?: string;
+  erID?: string;
 }
 
-export default function PatientQuestionnaire({ email, name, er }: PatientQuestionnaireProps) {
-  const [submitted, setSubmitted] = React.useState(false);
+export default function PatientQuestionnaire({ email, name, erID }: PatientQuestionnaireProps) {
+  const [submitted, setSubmitted] = useState(false);
   const { ers, isLoading } = useERs();
 
-  const form = useForm<z.infer<typeof erRequestSchema>>({
-    resolver: zodResolver(erRequestSchema),
+  const form = useForm<z.infer<typeof erRequestFormSchema>>({
+    resolver: zodResolver(erRequestFormSchema),
     defaultValues: {
       name: name ?? "",
       email: email ?? "",
@@ -36,7 +36,7 @@ export default function PatientQuestionnaire({ email, name, er }: PatientQuestio
       phn: "",
       symptoms: "",
       medicalHistory: "",
-      erID: er ?? "",
+      erID: erID ?? "",
     }
   });
 
@@ -176,16 +176,14 @@ export default function PatientQuestionnaire({ email, name, er }: PatientQuestio
     )}
   />
 
-  const handleSubmit = async (data: z.infer<typeof erRequestSchema>) => {
-    if (er !== undefined) {
-      data.erID = er;
+  const handleSubmit = async (data: z.infer<typeof erRequestFormSchema>) => {
+    if (erID !== undefined) {
+      data.erID = erID;
     }
 
     // Process or save the questionnaire data here
     setSubmitted(true);
-    console.log(data);
-    const result = await submitQuestionnaire(data);
-    console.log(result);
+    await submitQuestionnaire(data);
   };
 
   return (
@@ -207,7 +205,7 @@ export default function PatientQuestionnaire({ email, name, er }: PatientQuestio
               {dobField}
               {phnField}
               {emailField}
-              {er === undefined && isLoading ? <div>Loading ERs...</div> : erField}
+              {erID === undefined && isLoading ? <div>Loading ERs...</div> : erField}
               {symptomsField}
               {historyField}
             </form>

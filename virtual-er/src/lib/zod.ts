@@ -1,23 +1,19 @@
 import { getERByID } from "@/lib/server-actions"
 import { z } from "zod"
 
-const emailField = z.string({ required_error: "Email is required" })
-    .min(1, "Email is required")
-    .email("Invalid email")
-
-const passwordField = z.string({ required_error: "Password is required" })
-    .min(1, "Password is required")
-    .min(8, "Password must be more than 8 characters")
-    .max(32, "Password must be less than 32 characters")
-
 export const credentialsSchema = z.object({
-    email: emailField,
-    password: passwordField
+    email: z.string({ required_error: "Email is required" })
+        .min(1, "Email is required")
+        .email("Invalid email"),
+    password: z.string({ required_error: "Password is required" })
+        .min(1, "Password is required")
+        .min(8, "Password must be more than 8 characters")
+        .max(32, "Password must be less than 32 characters")
 })
 
-export const SOI = z.enum(["Extreme", "Major", "Moderate", "Minor"])
+export const SOI = z.enum(["Extreme", "Major", "Moderate", "Minor"], { required_error: "Severity of Illness is required" })
 
-export const erRequestSchema = z.object({
+export const erRequestFormSchema = z.object({
     name: z.string({ required_error: "Name is required" }),
     dob: z.string({ required_error: "Date of birth is required" })
         .date("Invalid date of birth"),
@@ -55,6 +51,33 @@ export const erRequestSchema = z.object({
                 })
             }
         }),
-    soi: SOI.optional(),
-    date: z.number().optional(),
 })
+
+export const erRequestSchema = erRequestFormSchema.merge(z.object({
+    requestDate: z.number(),
+    id: z.string()
+}))
+
+export const triageFormSchema = z.object({
+    roomNumber: z.string()
+        .transform((phn, ctx) => {
+            const phnNum = Number(phn)
+            if (isNaN(phnNum)) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.invalid_type,
+                    expected: "number",
+                    received: "string",
+                    message: "PHN must be a number"
+                })
+                return phnNum
+            }
+
+            return phnNum
+        }).optional(),
+    severityOfIllness: SOI,
+    relevantInformation: z.string({ required_error: "Relevant information is required" })
+})
+
+export const patientSchema = erRequestSchema.merge(triageFormSchema).merge(z.object({
+    severityRank: z.number(),
+}))

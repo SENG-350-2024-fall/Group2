@@ -1,9 +1,17 @@
+"use client"
+
+import PatientDetailsDialog from "@/components/hcp/patientDetailsDialog";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { usePatients } from "@/lib/data";
+import { deletePatientFromQueue } from "@/lib/server-actions";
 
-export default function PatientQueue() {
-    const { patients, isLoading, mutate } = usePatients();
+interface PatientQueueProps {
+    erID: string;
+}
+
+export default function PatientQueue({ erID }: PatientQueueProps) {
+    const { patients, isLoading, mutate } = usePatients(erID);
 
     if (isLoading) {
         return (
@@ -12,31 +20,18 @@ export default function PatientQueue() {
             </div>
         )
     }
-
-    async function deletePatientFromQueue(id: string) {
-        try {
-            const response = await fetch(`/api/patient/${id}`, {
-                method: "DELETE",
-            })
-
-            if (!response.ok) {
-                throw new Error(response.statusText);
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    }
     /*
         This function becomes more complicated as a result of updating the indexes correctly.
         It removes the patient that had their remove button clicked.
     */
-    const removePatient = (index: number) => {
+    const removePatient = async (index: number) => {
         const patientToRemove = patients[index];
 
         const updatedPatients = patients.splice(index, 1);
 
-        deletePatientFromQueue(patientToRemove.id!)
-            .then(() => mutate(updatedPatients));
+        await deletePatientFromQueue(patientToRemove.id!)
+
+        mutate(updatedPatients)
     };
 
     return (
@@ -49,17 +44,21 @@ export default function PatientQueue() {
                         <TableHead>Relevant Information</TableHead>
                         <TableHead>Position in Queue</TableHead>
                         <TableHead>Room Number</TableHead>
+                        <TableHead>Patient Details</TableHead>
                         <TableHead>Remove Patient</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {patients.map((patient, index) => (
                         <TableRow key={index}>
-                            <TableCell className="font-medium">{patient.PatientName}</TableCell>
-                            <TableCell>{patient.SeverityOfIllness}</TableCell>
-                            <TableCell>{patient.RelevantInformation}</TableCell>
+                            <TableCell className="font-medium">{patient.name}</TableCell>
+                            <TableCell>{patient.severityOfIllness}</TableCell>
+                            <TableCell>{patient.relevantInformation}</TableCell>
                             <TableCell>{index === 0 ? "0 (Current Patient)" : index}</TableCell>
-                            <TableCell>{patient.RoomNumber}</TableCell>
+                            <TableCell>{patient.roomNumber ?? ""}</TableCell>
+                            <TableCell>
+                                <PatientDetailsDialog patient={patient} />
+                            </TableCell>
                             <TableCell>
                                 <Button onClick={() => removePatient(index)}>Remove</Button>
                             </TableCell>

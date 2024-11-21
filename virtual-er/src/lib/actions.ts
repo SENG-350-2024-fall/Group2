@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import { UserData } from "@/lib/types";
+import type { UserData } from "@/lib/interfaces";
 import { redirect, RedirectType } from "next/navigation";
 
 async function getUser(email: string): Promise<UserData | null> {
