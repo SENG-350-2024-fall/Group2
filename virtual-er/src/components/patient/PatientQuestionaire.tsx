@@ -188,7 +188,7 @@ export default function PatientQuestionnaire({ email, name, erID }: PatientQuest
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
+      <DialogTrigger asChild className="m-4">
         <Button>Fill Out Medical Questionnaire</Button>
       </DialogTrigger>
       <DialogContent>
