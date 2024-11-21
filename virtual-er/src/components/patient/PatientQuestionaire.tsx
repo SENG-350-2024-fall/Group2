@@ -1,31 +1,32 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Textarea } from "@/components/ui/textarea";
 import { useERs } from "@/lib/data";
 import { submitQuestionnaire } from "@/lib/server-actions";
-import { erRequestSchema } from "@/lib/zod";
+import { erRequestFormSchema } from "@/lib/zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as React from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { RadioGroup, RadioGroupItem } from "../radio-group";
-import { ScrollArea } from "../scroll-area";
-import { Textarea } from "../textarea";
 
 interface PatientQuestionnaireProps {
   email?: string;
   name?: string;
+  erID?: string;
 }
 
-export default function PatientQuestionnaire({ email, name }: PatientQuestionnaireProps) {
-  const [submitted, setSubmitted] = React.useState(false);
+export default function PatientQuestionnaire({ email, name, erID }: PatientQuestionnaireProps) {
+  const [submitted, setSubmitted] = useState(false);
   const { ers, isLoading } = useERs();
 
-  const form = useForm<z.infer<typeof erRequestSchema>>({
-    resolver: zodResolver(erRequestSchema),
+  const form = useForm<z.infer<typeof erRequestFormSchema>>({
+    resolver: zodResolver(erRequestFormSchema),
     defaultValues: {
       name: name ?? "",
       email: email ?? "",
@@ -35,7 +36,7 @@ export default function PatientQuestionnaire({ email, name }: PatientQuestionnai
       phn: "",
       symptoms: "",
       medicalHistory: "",
-      erID: -1
+      erID: erID ?? "",
     }
   });
 
@@ -140,11 +141,11 @@ export default function PatientQuestionnaire({ email, name }: PatientQuestionnai
         <FormControl>
           <RadioGroup
             onValueChange={field.onChange}
-            defaultValue={String(field.value)}>
+            defaultValue={field.value}>
             {ers.map((er) => (
               <FormItem key={er.id} className="space-x-2">
                 <FormControl>
-                  <RadioGroupItem value={String(er.id)} />
+                  <RadioGroupItem value={er.id} />
                 </FormControl>
                 <FormLabel>
                   {er.name} - Wait time: {er.waitTime ?? 0} hours
@@ -175,17 +176,19 @@ export default function PatientQuestionnaire({ email, name }: PatientQuestionnai
     )}
   />
 
-  const handleSubmit = async (data: z.infer<typeof erRequestSchema>) => {
+  const handleSubmit = async (data: z.infer<typeof erRequestFormSchema>) => {
+    if (erID !== undefined) {
+      data.erID = erID;
+    }
+
     // Process or save the questionnaire data here
     setSubmitted(true);
-    console.log(data);
-    const result = await submitQuestionnaire(data);
-    console.log(result);
+    await submitQuestionnaire(data);
   };
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
+      <DialogTrigger asChild className="m-4">
         <Button>Fill Out Medical Questionnaire</Button>
       </DialogTrigger>
       <DialogContent>
@@ -202,14 +205,16 @@ export default function PatientQuestionnaire({ email, name }: PatientQuestionnai
               {dobField}
               {phnField}
               {emailField}
-              {isLoading ? <div>Loading ERs...</div> : erField}
+              {erID === undefined && isLoading ? <div>Loading ERs...</div> : erField}
               {symptomsField}
               {historyField}
             </form>
           </Form>
         </ScrollArea>
-        {submitted && <p className=" text-green-500">Thank you! Your response has been recorded.</p>}
-        <Button className="mt-2" type="submit" onClick={form.handleSubmit(handleSubmit)}>Submit</Button>
+        <DialogFooter>
+          {submitted && <p className=" text-green-500">Thank you! Your response has been recorded.</p>}
+          <Button className="mt-2" type="submit" onClick={form.handleSubmit(handleSubmit)}>Submit</Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

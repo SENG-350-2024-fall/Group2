@@ -1,8 +1,7 @@
 'use client'
 
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useERs } from "@/lib/data";
-import { ER } from "@/lib/interfaces";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../table";
 
 export default function AdminERs() {
     const { ers: ERs, isLoading } = useERs();

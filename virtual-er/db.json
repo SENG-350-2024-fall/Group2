@@ -23,65 +23,101 @@
       "waitTime": 5
     },
     {
-      "id": 0,
+      "id": "0",
       "name": "MattsER",
       "capacity": 200
     }
   ],
   "patients": [
     {
-      "PatientName": "Brock Break",
-      "SeverityOfIllness": "Extreme",
-      "RelevantInformation": "Shattered femur, needs urgent surgery",
+      "name": "Brock Break",
+      "severityOfIllness": "Extreme",
+      "relevantInformation": "Shattered femur, needs urgent surgery",
       "PositionInQueue": "0 (Current Patient)",
-      "RoomNumber": 115,
+      "roomNumber": 115,
       "severityRank": 1,
       "id": "4f97"
     },
     {
-      "PatientName": "Gail Rupture",
-      "SeverityOfIllness": "Extreme",
-      "RelevantInformation": "Severe head trauma",
+      "name": "Gail Rupture",
+      "severityOfIllness": "Extreme",
+      "relevantInformation": "Severe head trauma",
       "PositionInQueue": "1",
-      "RoomNumber": 155,
+      "roomNumber": 155,
       "severityRank": 1,
       "id": "6ea7"
     },
     {
-      "PatientName": "Carrie Concussion",
-      "SeverityOfIllness": "Major",
-      "RelevantInformation": "Can't see straight, severe dizziness and nausea",
+      "name": "Carrie Concussion",
+      "severityOfIllness": "Major",
+      "relevantInformation": "Can't see straight, severe dizziness and nausea",
       "PositionInQueue": "2",
-      "RoomNumber": 105,
+      "roomNumber": 105,
       "severityRank": 2,
       "id": "8290"
     },
     {
-      "PatientName": "Billie Hurt",
-      "SeverityOfIllness": "Moderate",
-      "RelevantInformation": "Some lower back pain from car accident",
+      "name": "Billie Hurt",
+      "severityOfIllness": "Moderate",
+      "relevantInformation": "Some lower back pain from car accident",
       "PositionInQueue": "3",
-      "RoomNumber": 145,
+      "roomNumber": 145,
       "severityRank": 3,
       "id": "6e7a"
     },
     {
-      "PatientName": "Johnny Bruise",
-      "SeverityOfIllness": "Minor",
-      "RelevantInformation": "Indicated pain on the ridge of his foot",
+      "name": "Johnny Bruise",
+      "severityOfIllness": "Minor",
+      "relevantInformation": "Indicated pain on the ridge of his foot",
       "PositionInQueue": "4",
-      "RoomNumber": 125,
+      "roomNumber": 125,
       "severityRank": 4,
       "id": "810e"
     },
     {
-      "PatientName": "Wanda Whiplash",
-      "SeverityOfIllness": "Minor",
-      "RelevantInformation": "Some pain in lower back",
+      "name": "Wanda Whiplash",
+      "severityOfIllness": "Minor",
+      "relevantInformation": "Some pain in lower back",
       "PositionInQueue": "5",
-      "RoomNumber": 122,
+      "roomNumber": 122,
       "severityRank": 4,
       "id": "7d28"
+    },
+    {
+      "id": "f022",
+      "name": "Timmy Trauma",
+      "severityOfIllness": "Major",
+      "relevantInformation": "Fractured Femur",
+      "roomNumber": 100,
+      "severityRank": 2
+    },
+    {
+      "id": "a7b6",
+      "severityOfIllness": "Moderate",
+      "relevantInformation": "Foobar",
+      "name": "Allie ACL",
+      "dob": "2024-11-13",
+      "phn": 1234122321,
+      "email": "allie@mail.com",
+      "symptoms": "Hurt Knee",
+      "medicalHistory": "ACL reconstruction surgery",
+      "erID": "1",
+      "requestDate": 1732147607888,
+      "severityRank": 3
+    },
+    {
+      "id": "bef0",
+      "severityOfIllness": "Moderate",
+      "relevantInformation": "NULL",
+      "name": "Debbie Drop Table",
+      "dob": "2000-01-01",
+      "phn": 1234567890,
+      "email": "debbie@mail.com",
+      "symptoms": "\"DROP TABLE",
+      "medicalHistory": "NULL",
+      "erID": "1",
+      "requestDate": 1732159490380,
+      "severityRank": 3
     }
   ],
   "credentials": [
@@ -121,16 +157,17 @@
       "role": "receptionist"
     }
   ],
-  "er_requests": [
+  "er-requests": [
     {
-      "id": "96cd",
-      "name": "Patient",
-      "dob": "2024-11-06",
+      "id": "384e",
+      "name": "Test",
+      "dob": "2024-11-05",
       "phn": 1234123123,
-      "email": "patient@mail.com",
-      "symptoms": "sad",
-      "medicalHistory": "happy",
-      "erID": 1
+      "email": "mail@example.com",
+      "symptoms": "Foo",
+      "medicalHistory": "Bar",
+      "erID": "1",
+      "requestDate": 1732161236444
     }
   ]
 }

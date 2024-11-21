@@ -1,8 +1,8 @@
 'use client'
 
-import { User } from "@/lib/interfaces";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import type { User } from "@/lib/interfaces";
 import { useEffect, useState } from "react";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../table";
 
 export default function AdminUsers() {
     const [Users, setUsers] = useState<User[]>([]);

@@ -55,13 +55,13 @@ export default function AdminDialog({ add }: HeaderProps) {
     // ✅ This will be type-safe and validated.
 
     const ERobject: ER = {
-      id: 0,
+      id: "0",
       name: values.name,
       capacity: parseInt(values.capacity)
     };
 
     const UserObject: ER = {
-      id: 0,
+      id: "0",
       name: values.name,
     };
 

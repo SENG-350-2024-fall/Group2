@@ -1,8 +1,8 @@
 import { auth } from "@/auth";
+import AppointmentManager from "@/components/patient/appointmentManager";
+import NearbyERs from "@/components/patient/nearbyERs";
+import PatientQuestionnaire from "@/components/patient/PatientQuestionaire";
 import Header from "@/components/ui/header";
-import AppointmentManager from "@/components/ui/patient/appointmentManager";
-import NearbyERs from "@/components/ui/patient/nearbyERs";
-import PatientQuestionnaire from "@/components/ui/patient/PatientQuestionaire";
 import { protectPageForRole } from "@/lib/actions";
 
 export default async function PatientPage() {
