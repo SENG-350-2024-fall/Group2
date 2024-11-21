@@ -4,7 +4,7 @@ import { NextRequest } from "next/server";
 import { z } from "zod";
 
 async function getPatients(erID: string): Promise<z.infer<typeof patientSchema>[]> {
-    const response = await fetch(`${process.env.JSON_DB_URL}/patients?erID=${erID}_sort=severityRank`, {
+    const response = await fetch(`${process.env.JSON_DB_URL}/patients?erID=${erID}&_sort=severityRank`, {
         method: "get",
         headers: {
             "Content-Type": "application/json"
