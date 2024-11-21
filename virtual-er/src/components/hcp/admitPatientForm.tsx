@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -25,7 +25,9 @@ export default function TriagePatientDialog({ erRequestData }: TriagePatientDial
     const form = useForm<z.infer<typeof triageFormSchema>>({
         resolver: zodResolver(triageFormSchema),
         defaultValues: {
-            roomNumber: 0,
+            // we set the phn to an empty string so the input field is empty
+            // @ts-expect-error
+            roomNumber: "",
             severityOfIllness: SOI.enum.Moderate,
             relevantInformation: "",
         }
@@ -82,8 +84,7 @@ export default function TriagePatientDialog({ erRequestData }: TriagePatientDial
                 <FormControl>
                     <Input
                         type="number"
-                        placeholder="100"
-                        required
+                        placeholder="Room Number"
                         {...field}
                     />
                 </FormControl>
@@ -112,8 +113,8 @@ export default function TriagePatientDialog({ erRequestData }: TriagePatientDial
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Triage Patient {erRequestData.name}</DialogTitle>
+                    <DialogDescription>Please provide details about the patient's condition.</DialogDescription>
                 </DialogHeader>
-
                 <ScrollArea className="h-auto">
                     <Form {...form}>
 
@@ -124,8 +125,10 @@ export default function TriagePatientDialog({ erRequestData }: TriagePatientDial
                         </form>
                     </Form>
                 </ScrollArea>
-                {submitted && <p className=" text-green-500">Thank you! Your response has been recorded.</p>}
-                <Button className="mt-2" type="submit" onClick={form.handleSubmit(handleSubmit)}>Submit</Button>
+                <DialogFooter>
+                    {submitted && <div className=" text-green-500">Thank you! Your response has been recorded.</div>}
+                    <Button className="mt-2" type="submit" onClick={form.handleSubmit(handleSubmit)}>Submit</Button>
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     );

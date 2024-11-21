@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -211,8 +211,10 @@ export default function PatientQuestionnaire({ email, name, erID }: PatientQuest
             </form>
           </Form>
         </ScrollArea>
-        {submitted && <p className=" text-green-500">Thank you! Your response has been recorded.</p>}
-        <Button className="mt-2" type="submit" onClick={form.handleSubmit(handleSubmit)}>Submit</Button>
+        <DialogFooter>
+          {submitted && <p className=" text-green-500">Thank you! Your response has been recorded.</p>}
+          <Button className="mt-2" type="submit" onClick={form.handleSubmit(handleSubmit)}>Submit</Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
