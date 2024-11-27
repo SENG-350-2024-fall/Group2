@@ -20,16 +20,21 @@ export default function PatientQueue({ erID }: PatientQueueProps) {
             </div>
         )
     }
-    /*
-        This function becomes more complicated as a result of updating the indexes correctly.
-        It removes the patient that had their remove button clicked.
-    */
+
+    if (patients.length === 0) {
+        return (
+            <div className="mt-10 w-2/3 pl-10">
+                <p>No Patients</p>
+            </div>
+        )
+    }
+
     const removePatient = async (index: number) => {
         const patientToRemove = patients[index];
 
         const updatedPatients = patients.splice(index, 1);
 
-        await deletePatientFromQueue(patientToRemove.id!)
+        await deletePatientFromQueue(patientToRemove.id)
 
         mutate(updatedPatients)
     };
