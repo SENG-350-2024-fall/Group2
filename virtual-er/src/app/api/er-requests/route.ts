@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
 
     const erID = request.nextUrl.searchParams.get("erID");
 
-    const response = await fetch(`${process.env.JSON_DB_URL}/er-requests?erID=${erID}`);
+    const response = await fetch(`${process.env.JSON_DB_URL}/er-requests?erID=${erID}&_sort=requestDate`);
 
     if (!response.ok) {
         return new Response("Failed to fetch ER requests", { status: 500 });
