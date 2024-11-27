@@ -1,7 +1,7 @@
-import AdminDialog from "@/components/ui/admin/AdminDialog";
-import BackupRestore from "@/components/ui/admin/backupRestore";
-import AdminERs from "@/components/ui/admin/ers";
-import AdminUsers from "@/components/ui/admin/users";
+import AdminDialog from "@/components/admin/AdminDialog";
+import BackupRestore from "@/components/admin/backupRestore";
+import AdminERs from "@/components/admin/ers";
+import AdminUsers from "@/components/admin/users";
 import Header from "@/components/ui/header";
 import { protectPageForRole } from "@/lib/actions";
 
