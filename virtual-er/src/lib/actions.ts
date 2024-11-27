@@ -1,8 +1,8 @@
 import { auth } from "@/auth";
-import type { UserData } from "@/lib/interfaces";
+import type { ER, UserData } from "@/lib/interfaces";
 import { redirect, RedirectType } from "next/navigation";
 
-async function getUser(email: string): Promise<UserData | null> {
+async function getUserByEmail(email: string): Promise<UserData | null> {
     const response = await fetch(`${process.env.JSON_DB_URL}/credentials?email=${email}`, {
         method: "get",
         headers: {
@@ -23,10 +23,26 @@ async function getUser(email: string): Promise<UserData | null> {
     return data[0];
 }
 
+async function getERByID(erID: string): Promise<ER | null> {
+    const response = await fetch(`${process.env.JSON_DB_URL}/ers?id=${erID}`)
+
+    if (!response.ok) {
+        return null;
+    }
+
+    const data: ER[] = await response.json()
+
+    if (data.length === 0) {
+        return null;
+    }
+
+    return data[0]
+}
+
 export async function getUserFromDb(email: unknown, pwHash: string | null): Promise<UserData | null> {
     if (typeof email !== "string" || pwHash === null) return null
 
-    const user = await getUser(email)
+    const user = await getUserByEmail(email)
 
     if (user === null) {
         return null
@@ -39,21 +55,38 @@ export async function getUserFromDb(email: unknown, pwHash: string | null): Prom
     return null
 }
 
+export async function getER(): Promise<ER | null> {
+    const session = await auth()
+    if (!session?.user?.email) {
+        return null
+    }
+
+    const email = session.user.email
+
+    const user = await getUserByEmail(email)
+
+    if (user?.erID === undefined) {
+        return null
+    }
+
+    return await getERByID(user.erID)
+}
+
 export async function getRoleFromEmail(email: string): Promise<string> {
-    const user = await getUser(email);
+    const user = await getUserByEmail(email);
 
     return user?.role || ""
 }
 
 export async function getRole() {
-    const session = await auth();
+    const session = await auth()
     if (!session?.user?.email) {
         return ""
     }
 
     const email = session.user.email
 
-    const user = await getUser(email);
+    const user = await getUserByEmail(email)
 
     return user?.role || ""
 }

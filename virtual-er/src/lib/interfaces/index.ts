@@ -5,6 +5,7 @@ import { z } from "zod";
 export type UserData = AuthUser & {
     pwHash: string
     role: string
+    erID?: string
 }
 
 export type User = {
@@ -14,7 +15,7 @@ export type User = {
 
 export type ER = {
     id: string;
-    name?: string;
+    name: string;
     capacity?: number;
     waitTime?: number;
 };
