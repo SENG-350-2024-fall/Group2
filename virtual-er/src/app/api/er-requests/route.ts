@@ -1,11 +1,14 @@
 import { checkRoleList } from "@/lib/actions";
+import { NextRequest } from "next/server";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
     if (!await checkRoleList("doctor", "nurse", "receptionist")) {
         return new Response("Unauthorized", { status: 401 });
     }
 
-    const response = await fetch(`${process.env.JSON_DB_URL}/er-requests`);
+    const erID = request.nextUrl.searchParams.get("erID");
+
+    const response = await fetch(`${process.env.JSON_DB_URL}/er-requests?erID=${erID}`);
 
     if (!response.ok) {
         return new Response("Failed to fetch ER requests", { status: 500 });

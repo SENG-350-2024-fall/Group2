@@ -36,7 +36,8 @@
       "PositionInQueue": "0 (Current Patient)",
       "roomNumber": 115,
       "severityRank": 1,
-      "id": "4f97"
+      "id": "4f97",
+      "erID": "1"
     },
     {
       "name": "Gail Rupture",
@@ -45,7 +46,8 @@
       "PositionInQueue": "1",
       "roomNumber": 155,
       "severityRank": 1,
-      "id": "6ea7"
+      "id": "6ea7",
+      "erID": "1"
     },
     {
       "name": "Carrie Concussion",
@@ -54,7 +56,8 @@
       "PositionInQueue": "2",
       "roomNumber": 105,
       "severityRank": 2,
-      "id": "8290"
+      "id": "8290",
+      "erID": "1"
     },
     {
       "name": "Billie Hurt",
@@ -63,7 +66,8 @@
       "PositionInQueue": "3",
       "roomNumber": 145,
       "severityRank": 3,
-      "id": "6e7a"
+      "id": "6e7a",
+      "erID": "1"
     },
     {
       "name": "Johnny Bruise",
@@ -72,7 +76,8 @@
       "PositionInQueue": "4",
       "roomNumber": 125,
       "severityRank": 4,
-      "id": "810e"
+      "id": "810e",
+      "erID": "2"
     },
     {
       "name": "Wanda Whiplash",
@@ -81,7 +86,8 @@
       "PositionInQueue": "5",
       "roomNumber": 122,
       "severityRank": 4,
-      "id": "7d28"
+      "id": "7d28",
+      "erID": "2"
     },
     {
       "id": "f022",
@@ -89,7 +95,8 @@
       "severityOfIllness": "Major",
       "relevantInformation": "Fractured Femur",
       "roomNumber": 100,
-      "severityRank": 2
+      "severityRank": 2,
+      "erID": "2"
     },
     {
       "id": "a7b6",
@@ -140,21 +147,32 @@
       "email": "doctor@mail.com",
       "pwHash": "doctordoctor",
       "name": "Doctor",
-      "role": "doctor"
+      "role": "doctor",
+      "erID": "1"
     },
     {
       "id": "4",
       "email": "nurse@mail.com",
       "pwHash": "nursenurse",
       "name": "Nurse",
-      "role": "nurse"
+      "role": "nurse",
+      "erID": "1"
     },
     {
       "id": "5",
       "email": "receptionist@mail.com",
       "pwHash": "receptionist",
       "name": "Receptionist",
-      "role": "receptionist"
+      "role": "receptionist",
+      "erID": "1"
+    },
+    {
+      "id": "6",
+      "email": "jubileedoc@mail.com",
+      "pwHash": "jubileedoc",
+      "name": "Jubilee Doctor",
+      "role": "doctor",
+      "erID": "2"
     }
   ],
   "er-requests": [
