@@ -11,6 +11,12 @@ export const credentialsSchema = z.object({
         .max(32, "Password must be less than 32 characters")
 })
 
+export const registerSchema = credentialsSchema.extend({
+    name: z.string({ required_error: "Name is required" })
+        .min(1, "Name is required")
+        .max(32, "Name must be less than 32 characters")
+})
+
 export const SOI = z.enum(["Extreme", "Major", "Moderate", "Minor"], { required_error: "Severity of Illness is required" })
 
 export const erRequestFormSchema = z.object({
