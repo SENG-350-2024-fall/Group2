@@ -111,3 +111,16 @@ export async function protectPageForRoleList(...roles: string[]) {
         redirect("/login", RedirectType.replace);
     }
 }
+
+export async function getName() {
+    const session = await auth()
+    if (!session?.user?.email) {
+        return ""
+    }
+
+    const email = session.user.email
+
+    const user = await getUserByEmail(email)
+
+    return user?.name || ""
+}

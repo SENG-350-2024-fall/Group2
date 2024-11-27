@@ -1,4 +1,5 @@
-import AdminDialog from "@/components/admin/AdminDialog";
+import AdminDialog from "@/components/admin/AddERDialog";
+import AddUserDialog from "@/components/admin/AddUserDialog";
 import BackupRestore from "@/components/admin/backupRestore";
 import AdminERs from "@/components/admin/ers";
 import AdminUsers from "@/components/admin/users";
@@ -19,7 +20,7 @@ export default async function Page() {
 
           <AdminUsers />
 
-          <AdminDialog add="User"></AdminDialog>
+          <AddUserDialog></AddUserDialog>
         </div>
 
         <div className="p-6">

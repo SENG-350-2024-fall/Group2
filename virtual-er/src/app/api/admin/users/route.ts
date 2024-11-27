@@ -1,8 +1,8 @@
 import { checkRole } from "@/lib/actions";
-import type { User } from "@/lib/interfaces";
+import type { UserData } from "@/lib/interfaces";
 
-async function getUsers(): Promise<User[]> {
-    const response = await fetch(`${process.env.JSON_DB_URL}/users`, {
+async function getUsers(): Promise<UserData[]> {
+    const response = await fetch(`${process.env.JSON_DB_URL}/credentials`, {
         method: "get",
         headers: {
             "Content-Type": "application/json"
@@ -13,7 +13,7 @@ async function getUsers(): Promise<User[]> {
       throw new Error(response.statusText);
     }
 
-    return await response.json() as User[];
+    return await response.json() as UserData[];
 }
 
 export async function GET() {
