@@ -15,17 +15,19 @@ export default async function Page() {
     }
 
     return (
-        <div className="relative min-h-screen"> {/* Ensure the container takes full height */}
+        <div className="relative min-h-screen">
             <Header ERName={` - ${er.name}`} />
             <Tabs defaultValue="patient-queue">
-                <TabsList className="m-4">
-                    <TabsTrigger value="patient-queue">Patient Queue</TabsTrigger>
-                    <TabsTrigger value="request-queue">Request Queue</TabsTrigger>
-                </TabsList>
+                <div className="flex m-4 space-x-4">
+                    <TabsList>
+                        <TabsTrigger value="patient-queue">Patient Queue</TabsTrigger>
+                        <TabsTrigger value="request-queue">Request Queue</TabsTrigger>
+                    </TabsList>
+                    {role === 'receptionist' && (<PatientQuestionnaire erID={er.id} />)}
+                </div>
                 <TabsContent value="patient-queue"><PatientQueue erID={er.id} /></TabsContent>
                 <TabsContent value="request-queue"><ERRequestsQueue erID={er.id} /></TabsContent>
             </Tabs>
-            {role === 'receptionist' && (<PatientQuestionnaire erID={er.id} />)}
         </div>
     );
 }
