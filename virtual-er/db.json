@@ -173,6 +173,13 @@
       "name": "Jubilee Doctor",
       "role": "doctor",
       "erID": "2"
+    },
+    {
+      "id": "f79e",
+      "email": "raf@mail.com",
+      "pwHash": "rafpassword",
+      "name": "Raf",
+      "role": "patient"
     }
   ],
   "er-requests": [
