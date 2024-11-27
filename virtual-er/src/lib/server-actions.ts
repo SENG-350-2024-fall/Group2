@@ -156,3 +156,17 @@ export async function deletePatientFromQueue(id: string) {
         console.error(error);
     }
 }
+
+export async function deleteERRequest(id: string) {
+    try {
+        const response = await fetch(`${process.env.JSON_DB_URL}/er-requests/${id}`, {
+            method: "delete"
+        })
+
+        if (!response.ok) {
+            throw new Error(response.statusText);
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
