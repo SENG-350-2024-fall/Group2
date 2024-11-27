@@ -2,8 +2,10 @@
 
 import { signIn } from "@/auth";
 import { checkRoleList, getRoleFromEmail } from "@/lib/actions";
+
 import type { ER, UserData } from "@/lib/interfaces";
 import { adminAddUserSchema, credentialsSchema, erRequestFormSchema, erRequestSchema, patientSchema, SOI, triageFormSchema } from "@/lib/zod";
+
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { numUsers } from "./data";
@@ -33,6 +35,36 @@ export async function submitLoginForm(data: z.infer<typeof credentialsSchema>) {
 
     redirect(pages[role] || "/");
 }
+
+export async function submitRegisterForm(data: z.infer<typeof registerSchema>) {
+    const { email, password, name } = data;
+
+    const inUseCheck = await getRoleFromEmail(email)
+
+    console.log(inUseCheck);
+
+    if (inUseCheck !== "") {
+        return { error: "Email already in use" };
+    }
+
+    const role = "patient";
+    const userData = { email, pwHash: password, name, role };
+
+    const response = await fetch(`${process.env.JSON_DB_URL}/credentials`, {
+        method: "post",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(userData)
+    });
+
+    if (!response.ok) {
+        return { error: "Failed to register" };
+    }
+
+    await signIn("credentials", { email, password, redirect: true, redirectTo: "/patient" });
+}
+
 
 export async function getERByID(id: string): Promise<ER | null> {
     const response = await fetch(`${process.env.JSON_DB_URL}/ers/${id}`, {
