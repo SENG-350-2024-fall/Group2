@@ -41,31 +41,31 @@
     },
     {
       "name": "Gail Rupture",
-      "severityOfIllness": "Extreme",
+      "severityOfIllness": "Moderate",
       "relevantInformation": "Severe head trauma",
       "PositionInQueue": "1",
       "roomNumber": 155,
-      "severityRank": 1,
+      "severityRank": 3,
       "id": "6ea7",
       "erID": "1"
     },
     {
       "name": "Carrie Concussion",
-      "severityOfIllness": "Major",
+      "severityOfIllness": "Minor",
       "relevantInformation": "Can't see straight, severe dizziness and nausea",
       "PositionInQueue": "2",
       "roomNumber": 105,
-      "severityRank": 2,
+      "severityRank": 4,
       "id": "8290",
       "erID": "1"
     },
     {
       "name": "Billie Hurt",
-      "severityOfIllness": "Moderate",
+      "severityOfIllness": "Major",
       "relevantInformation": "Some lower back pain from car accident",
       "PositionInQueue": "3",
       "roomNumber": 145,
-      "severityRank": 3,
+      "severityRank": 2,
       "id": "6e7a",
       "erID": "1"
     },
@@ -100,7 +100,7 @@
     },
     {
       "id": "a7b6",
-      "severityOfIllness": "Moderate",
+      "severityOfIllness": "Minor",
       "relevantInformation": "Foobar",
       "name": "Allie ACL",
       "dob": "2024-11-13",
@@ -110,7 +110,7 @@
       "medicalHistory": "ACL reconstruction surgery",
       "erID": "1",
       "requestDate": 1732147607888,
-      "severityRank": 3
+      "severityRank": 4
     },
     {
       "id": "bef0",

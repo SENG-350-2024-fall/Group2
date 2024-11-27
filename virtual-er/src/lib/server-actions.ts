@@ -140,3 +140,38 @@ export async function deleteERRequest(id: string) {
         console.error(error);
     }
 }
+export async function updatePatientSOI(patientId: string, newSeverity: string) {
+    try {
+        // Fetch the existing patient data
+        const fetchResponse = await fetch(`${process.env.JSON_DB_URL}/patients/${patientId}`);
+        if (!fetchResponse.ok) {
+            console.error("Failed to fetch patient data:", fetchResponse.status);
+            throw new Error("Failed to fetch patient data");
+        }
+
+        const patientData = await fetchResponse.json();
+
+        // Update only the severityOfIllness field while keeping other fields intact
+        const updatedPatientData = {
+            ...patientData,
+            severityOfIllness: newSeverity,
+            severityRank: severityRank(SOI.parse(newSeverity)),
+        };
+
+        // Send the updated data back to the server
+        const updateResponse = await fetch(`${process.env.JSON_DB_URL}/patients/${patientId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(updatedPatientData),
+        });
+
+        if (!updateResponse.ok) {
+            console.error("Response Status:", updateResponse.status);
+            throw new Error(updateResponse.statusText);
+        }
+    } catch (error) {
+        console.error(`Failed to update patient SOI for ID: ${patientId}`, error);
+    }
+}
