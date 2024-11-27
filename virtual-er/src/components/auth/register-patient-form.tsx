@@ -10,40 +10,57 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { submitLoginForm } from '@/lib/server-actions';
-import { credentialsSchema } from "@/lib/zod";
+import { submitRegisterForm } from '@/lib/server-actions';
+import { registerSchema } from "@/lib/zod";
 import { zodResolver } from '@hookform/resolvers/zod';
-import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-export default function LoginForm() {
-    const [loginError, setLoginError] = useState<string | null>(null)
-    const [loggingIn, setLoggingIn] = useState<boolean>(false)
+export default function RegisterForm() {
+    const [registerError, setRegisterError] = useState<string | null>(null)
+    const [registering, setRegistering] = useState<boolean>(false)
 
-    function handleSubmit(data: z.infer<typeof credentialsSchema>) {
-        setLoggingIn(true)
+    function handleSubmit(data: z.infer<typeof registerSchema>) {
+        setRegistering(true)
 
-        submitLoginForm(data)
+        submitRegisterForm(data)
             .then(result => {
                 if (result?.error) {
-                    setLoggingIn(false)
-                    setLoginError(result.error)
+                    setRegistering(false)
+                    setRegisterError(result.error)
                 }
             })
     }
 
-    const form = useForm<z.infer<typeof credentialsSchema>>({
-        resolver: zodResolver(credentialsSchema),
+    const form = useForm<z.infer<typeof registerSchema>>({
+        resolver: zodResolver(registerSchema),
         defaultValues: {
+            name: '',
             email: '',
             password: ''
         }
     })
 
-    const emailField = <FormField
-        control={form.control}
+    const nameField = <FormField control={form.control}
+        name='name'
+        render={({ field }) => (
+            <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                    <Input
+                        type="text"
+                        placeholder="Jane Doe"
+                        required
+                        {...field}
+                    />
+                </FormControl>
+                <FormMessage />
+            </FormItem>
+        )}
+    />
+
+    const emailField = <FormField control={form.control}
         name='email'
         render={({ field }) => (
             <FormItem>
@@ -83,16 +100,12 @@ export default function LoginForm() {
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(handleSubmit)} className="m-auto space-y-3">
+                {nameField}
                 {emailField}
                 {passwordField}
-                <div className="flex justify-between">
-                    <Button type="submit">Login</Button>
-                    <Link href="/register">
-                        <Button type="button" className="ml-2">Register</Button>
-                    </Link>
-                </div>
-                {loginError && <p className="text-red-500">{loginError}</p>}
-                {loggingIn && <p>Logging in...</p>}
+                <Button type="submit">Register</Button>
+                {registerError && <p className="text-red-500">{registerError}</p>}
+                {registering && <p>Registering...</p>}
             </form>
         </Form>
     )
