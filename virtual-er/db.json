@@ -14,7 +14,7 @@
       "id": "1",
       "name": "Vic Gen",
       "capacity": 200,
-      "waitTime": 3
+      "waitTime": 40
     },
     {
       "id": "2",
@@ -51,21 +51,21 @@
     },
     {
       "name": "Carrie Concussion",
-      "severityOfIllness": "Major",
+      "severityOfIllness": "Extreme",
       "relevantInformation": "Can't see straight, severe dizziness and nausea",
       "PositionInQueue": "2",
       "roomNumber": 105,
-      "severityRank": 2,
+      "severityRank": 1,
       "id": "8290",
       "erID": "1"
     },
     {
       "name": "Billie Hurt",
-      "severityOfIllness": "Moderate",
+      "severityOfIllness": "Extreme",
       "relevantInformation": "Some lower back pain from car accident",
       "PositionInQueue": "3",
       "roomNumber": 145,
-      "severityRank": 3,
+      "severityRank": 1,
       "id": "6e7a",
       "erID": "1"
     },
@@ -100,7 +100,7 @@
     },
     {
       "id": "a7b6",
-      "severityOfIllness": "Moderate",
+      "severityOfIllness": "Extreme",
       "relevantInformation": "Foobar",
       "name": "Allie ACL",
       "dob": "2024-11-13",
@@ -110,11 +110,11 @@
       "medicalHistory": "ACL reconstruction surgery",
       "erID": "1",
       "requestDate": 1732147607888,
-      "severityRank": 3
+      "severityRank": 1
     },
     {
       "id": "bef0",
-      "severityOfIllness": "Moderate",
+      "severityOfIllness": "Extreme",
       "relevantInformation": "NULL",
       "name": "Debbie Drop Table",
       "dob": "2000-01-01",
@@ -124,7 +124,37 @@
       "medicalHistory": "NULL",
       "erID": "1",
       "requestDate": 1732159490380,
-      "severityRank": 3
+      "severityRank": 1
+    },
+    {
+      "id": "384e",
+      "roomNumber": 1,
+      "severityOfIllness": "Extreme",
+      "relevantInformation": "1",
+      "name": "Last",
+      "dob": "2024-11-05",
+      "phn": 1234123123,
+      "email": "mail@example.com",
+      "symptoms": "Foo",
+      "medicalHistory": "Bar",
+      "erID": "1",
+      "requestDate": 1732161236666,
+      "severityRank": 1
+    },
+    {
+      "id": "384e",
+      "roomNumber": 1,
+      "severityOfIllness": "Extreme",
+      "relevantInformation": "1",
+      "name": "Last",
+      "dob": "2024-11-05",
+      "phn": 1234123123,
+      "email": "mail@example.com",
+      "symptoms": "Foo",
+      "medicalHistory": "Bar",
+      "erID": "1",
+      "requestDate": 1732161236666,
+      "severityRank": 1
     }
   ],
   "credentials": [
@@ -185,14 +215,14 @@
   "er-requests": [
     {
       "id": "384e",
-      "name": "Test",
+      "name": "Last",
       "dob": "2024-11-05",
       "phn": 1234123123,
       "email": "mail@example.com",
       "symptoms": "Foo",
       "medicalHistory": "Bar",
       "erID": "1",
-      "requestDate": 1732161236444
+      "requestDate": 1732161236666
     }
   ]
 }

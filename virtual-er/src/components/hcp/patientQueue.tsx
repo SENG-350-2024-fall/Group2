@@ -4,7 +4,15 @@ import PatientDetailsDialog from "@/components/hcp/patientDetailsDialog";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { usePatients } from "@/lib/data";
-import { deletePatientFromQueue } from "@/lib/server-actions";
+import { deletePatientFromQueue, updatePatientSOI } from "@/lib/server-actions";
+import { SOI } from "@/lib/zod";
+
+export enum severityRank {
+    Extreme = 1,
+    Major = 2,
+    Moderate = 3,
+    Minor = 4,
+}
 
 interface PatientQueueProps {
     erID: string;
@@ -34,10 +42,28 @@ export default function PatientQueue({ erID }: PatientQueueProps) {
 
         const updatedPatients = patients.splice(index, 1);
 
-        await deletePatientFromQueue(patientToRemove.id)
+        await deletePatientFromQueue(patientToRemove.id, patientToRemove.erID)
 
         mutate(updatedPatients)
     };
+
+    const handleSeverityChange = async (patientId: string, newSeverity: string) => {
+        try {
+            await updatePatientSOI(patientId, newSeverity);
+    
+            const updatedPatients = patients
+                .map((patient) =>
+                    patient.id === patientId
+                        ? { ...patient, severityOfIllness: newSeverity, severityRank: severityRank[SOI.parse(newSeverity)]}
+                        : patient
+                )
+                
+            mutate(updatedPatients, true); 
+        } catch (error) {
+            console.error("Failed to update severity of illness:", error);
+        }
+    };
+    
 
     return (
         <div className="m-4 w-auto">
@@ -57,7 +83,17 @@ export default function PatientQueue({ erID }: PatientQueueProps) {
                     {patients.map((patient, index) => (
                         <TableRow key={index}>
                             <TableCell className="font-medium">{patient.name}</TableCell>
-                            <TableCell>{patient.severityOfIllness}</TableCell>
+                            <TableCell>
+                                    <select
+                                            value={patient.severityOfIllness}
+                                            onChange={(e) => handleSeverityChange(patient.id, e.target.value)}
+                                            className="mt-2">
+                                            <option value="Extreme">Extreme</option>
+                                            <option value="Major">Major</option>
+                                            <option value="Moderate">Moderate</option>
+                                            <option value="Minor">Minor</option>
+                                    </select>
+                            </TableCell>
                             <TableCell>{patient.relevantInformation}</TableCell>
                             <TableCell>{index === 0 ? "0 (Current Patient)" : index}</TableCell>
                             <TableCell>{patient.roomNumber ?? ""}</TableCell>
