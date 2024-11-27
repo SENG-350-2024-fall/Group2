@@ -1,10 +1,24 @@
-import type { ER } from '@/lib/interfaces'
+import type { ER, UserData } from '@/lib/interfaces'
 import { erRequestSchema, patientSchema } from '@/lib/zod'
 import useSWR from 'swr'
 import { z } from 'zod'
 
 export function fetcher(...args: Parameters<typeof fetch>) {
     return fetch(...args).then(res => res.json())
+}
+
+export function useUsers() {
+    const { data, error, isLoading } = useSWR('/api/admin/users', fetcher)
+    return {
+        users: data as UserData[],
+        isLoading,
+        isError: error
+    }
+}
+
+export function numUsers() {
+    const { data, error, isLoading } = useSWR('/api/admin/users', fetcher)
+    return data.size();
 }
 
 export function useERs() {
@@ -15,6 +29,11 @@ export function useERs() {
         isLoading,
         isError: error
     }
+}
+
+export function numERs() {
+    const { data, error, isLoading } = useSWR('/api/ers', fetcher)
+    return data.size();
 }
 
 export function usePatients(erID: string) {

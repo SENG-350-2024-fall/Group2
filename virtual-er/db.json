@@ -175,11 +175,11 @@
       "erID": "2"
     },
     {
-      "id": "f79e",
-      "email": "raf@mail.com",
-      "pwHash": "rafpassword",
-      "name": "Raf",
-      "role": "patient"
+      "id": 7,
+      "name": "MattSmith",
+      "email": "matt@mail.com",
+      "pwHash": "mattmatt",
+      "role": "admin"
     }
   ],
   "er-requests": [

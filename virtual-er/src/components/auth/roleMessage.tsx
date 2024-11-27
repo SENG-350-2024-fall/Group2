@@ -1,4 +1,4 @@
-import { getRole } from "@/lib/actions";
+import { getName } from "@/lib/actions";
 
 function titleCaseWord(word: string) {
     if (!word) return word;
@@ -6,7 +6,7 @@ function titleCaseWord(word: string) {
 }
 
 export default async function RoleMessage() {
-    const role = await getRole();
+    const role = await getName();
 
     return (
         <div className="text-sm text-gray-600">

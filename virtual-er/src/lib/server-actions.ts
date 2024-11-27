@@ -2,10 +2,13 @@
 
 import { signIn } from "@/auth";
 import { checkRoleList, getRoleFromEmail } from "@/lib/actions";
-import type { ER } from "@/lib/interfaces";
-import { credentialsSchema, erRequestFormSchema, erRequestSchema, patientSchema, registerSchema, SOI, triageFormSchema } from "@/lib/zod";
+
+import type { ER, UserData } from "@/lib/interfaces";
+import { adminAddUserSchema, credentialsSchema, erRequestFormSchema, erRequestSchema, patientSchema, SOI, triageFormSchema, registerSchema } from "@/lib/zod";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { numUsers } from "./data";
+import { DashboardIcon } from "@radix-ui/react-icons";
 
 export async function submitLoginForm(data: z.infer<typeof credentialsSchema>) {
     const { email, password } = data;
@@ -169,4 +172,41 @@ export async function deleteERRequest(id: string) {
     } catch (error) {
         console.error(error);
     }
+}
+
+export async function adminAddUser(data: z.infer<typeof adminAddUserSchema>) {
+    const UsersResponse = await fetch(`${process.env.JSON_DB_URL}/credentials`, {
+        method: "get",
+        headers: {
+            "Content-Type": "application/json"
+        }});
+        if (!UsersResponse.ok) {
+            return null;
+        }
+    
+    const currentNumUsers: UserData[] = await UsersResponse.json();
+    const newUserID = (currentNumUsers.length + 1) + "";
+
+    const newUser: UserData = {
+        id: newUserID,
+        name: data.name,
+        email: data.email,
+        pwHash: data.password,
+        role: data.role,
+        erID: ""
+    }
+
+    const response = await fetch(`${process.env.JSON_DB_URL}/credentials`, {
+        method: "post",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({newUser})
+    });
+
+    if (!response.ok) {
+        return { error: "Failed to add user" };
+    }
+
+    return { success: true };
 }
