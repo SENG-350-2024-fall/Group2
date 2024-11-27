@@ -40,7 +40,7 @@ export default function AddUserDialog() {
     defaultValues: {
       name: '',
       email: '',
-      pwHash: '',
+      password: '',
       role: ''
   }
   })
@@ -108,7 +108,7 @@ export default function AddUserDialog() {
             />
             <FormField
               control={form.control}
-              name="pwHash"
+              name="password"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Password</FormLabel>
