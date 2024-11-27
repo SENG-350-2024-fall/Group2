@@ -42,7 +42,7 @@ export default function PatientQueue({ erID }: PatientQueueProps) {
 
         const updatedPatients = patients.splice(index, 1);
 
-        await deletePatientFromQueue(patientToRemove.id)
+        await deletePatientFromQueue(patientToRemove.id, patientToRemove.erID)
 
         mutate(updatedPatients)
     };
