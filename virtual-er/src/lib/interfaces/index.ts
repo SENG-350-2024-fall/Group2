@@ -8,11 +8,6 @@ export type UserData = AuthUser & {
     erID?: string
 }
 
-export type User = {
-    id: number;
-    name?: string;
-};
-
 export type ER = {
     id: string;
     name: string;

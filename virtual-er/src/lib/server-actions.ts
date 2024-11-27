@@ -2,10 +2,13 @@
 
 import { signIn } from "@/auth";
 import { checkRoleList, getRoleFromEmail } from "@/lib/actions";
-import type { ER } from "@/lib/interfaces";
-import { credentialsSchema, erRequestFormSchema, erRequestSchema, patientSchema, SOI, triageFormSchema } from "@/lib/zod";
+
+import type { ER, UserData } from "@/lib/interfaces";
+import { adminAddUserSchema, credentialsSchema, erRequestFormSchema, erRequestSchema, patientSchema, SOI, triageFormSchema, registerSchema } from "@/lib/zod";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { numUsers } from "./data";
+import { DashboardIcon } from "@radix-ui/react-icons";
 
 export async function calculateWaitTimeByER(erID: string) {
     try {
@@ -92,6 +95,36 @@ export async function submitLoginForm(data: z.infer<typeof credentialsSchema>) {
 
     redirect(pages[role] || "/");
 }
+
+export async function submitRegisterForm(data: z.infer<typeof registerSchema>) {
+    const { email, password, name } = data;
+
+    const inUseCheck = await getRoleFromEmail(email)
+
+    console.log(inUseCheck);
+
+    if (inUseCheck !== "") {
+        return { error: "Email already in use" };
+    }
+
+    const role = "patient";
+    const userData = { email, pwHash: password, name, role };
+
+    const response = await fetch(`${process.env.JSON_DB_URL}/credentials`, {
+        method: "post",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(userData)
+    });
+
+    if (!response.ok) {
+        return { error: "Failed to register" };
+    }
+
+    await signIn("credentials", { email, password, redirect: true, redirectTo: "/patient" });
+}
+
 
 export async function getERByID(id: string): Promise<ER | null> {
     const response = await fetch(`${process.env.JSON_DB_URL}/ers/${id}`, {
@@ -234,4 +267,41 @@ export async function updatePatientSOI(patientId: string, newSeverity: string) {
     } catch (error) {
         console.error(`Failed to update patient SOI for ID: ${patientId}`, error);
     }
+}
+
+export async function adminAddUser(data: z.infer<typeof adminAddUserSchema>) {
+    const UsersResponse = await fetch(`${process.env.JSON_DB_URL}/credentials`, {
+        method: "get",
+        headers: {
+            "Content-Type": "application/json"
+        }});
+        if (!UsersResponse.ok) {
+            return null;
+        }
+    
+    const currentNumUsers: UserData[] = await UsersResponse.json();
+    const newUserID = (currentNumUsers.length + 1) + "";
+
+    const newUser: UserData = {
+        id: newUserID,
+        name: data.name,
+        email: data.email,
+        pwHash: data.password,
+        role: data.role,
+        erID: ""
+    }
+
+    const response = await fetch(`${process.env.JSON_DB_URL}/credentials`, {
+        method: "post",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({newUser})
+    });
+
+    if (!response.ok) {
+        return { error: "Failed to add user" };
+    }
+
+    return { success: true };
 }

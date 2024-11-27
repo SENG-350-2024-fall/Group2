@@ -203,6 +203,13 @@
       "name": "Jubilee Doctor",
       "role": "doctor",
       "erID": "2"
+    },
+    {
+      "id": 7,
+      "name": "MattSmith",
+      "email": "matt@mail.com",
+      "pwHash": "mattmatt",
+      "role": "admin"
     }
   ],
   "er-requests": [

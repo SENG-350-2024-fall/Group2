@@ -1,25 +1,15 @@
 'use client'
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import type { User } from "@/lib/interfaces";
-import { useEffect, useState } from "react";
+import { useUsers } from "@/lib/data";
+import type { UserData } from "@/lib/interfaces";
 
 export default function AdminUsers() {
-    const [Users, setUsers] = useState<User[]>([]);
+    const { users: Users, isLoading } = useUsers();
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const userResult = await fetch('/api/admin/users');
-                let UserList = await userResult.json()
-                setUsers(UserList);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-
-        fetchData();
-    }, []);
+    if (isLoading) {
+        return <div>Loading Users...</div>;
+    } else {
 
     return (
         <Table>
@@ -27,16 +17,21 @@ export default function AdminUsers() {
                 <TableRow>
                     <TableHead className="w-[100px]">ID</TableHead>
                     <TableHead>Name</TableHead>
+                    <TableHead>Email</TableHead>
+                    <TableHead>Role</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {Users.map((user: User) => (
+                {Users.map((user: UserData) => (
                     <TableRow key={user.id}>
                         <TableCell className="font-medium">{user.id}</TableCell>
                         <TableCell>{user.name}</TableCell>
+                        <TableCell>{user.email}</TableCell>
+                        <TableCell>{user.role}</TableCell>
                     </TableRow>
                 ))}
             </TableBody>
         </Table>
     )
+    }
 }
